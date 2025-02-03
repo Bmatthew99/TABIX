@@ -1,0 +1,1068 @@
+/* Подключаем шрифт */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap");
+
+/* Основные стили */
+body {
+  font-family: "Inter", sans-serif;
+  background: #f4f4f4;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  overflow: auto;
+}
+
+h1 {
+  font-weight: 500;
+  color: #000;
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Верхний блок с контролами */
+.top-controls {
+  width: 90%;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left-controls {
+  display: flex;
+  align-items: center;
+}
+
+.left-controls button {
+  margin-right: 10px;
+}
+
+.right-controls {
+  width: 90%;
+  text-align: right;
+}
+
+/* Блок для статусов и поисковой строки */
+.status-search-row {
+  width: 90%;
+  margin: 10px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Кнопки статусов */
+.status-buttons {
+  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-start;
+}
+
+/* Контейнер для поисковой строки – добавлен margin-top для сдвига вниз */
+.search-container {
+  position: relative;
+  display: inline-block;
+  text-align: right;
+  margin-top: -2px;
+}
+
+/* Поисковая строка */
+.search-input {
+  margin-bottom: 0;
+  width: 200px;
+  height: 31px;
+  padding: 0 50px 0 10px; /* правый отступ для размещения иконки */
+  border: 1px solid #bbb;
+  border-radius: 20px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s ease-in-out;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  border: 1px solid #555;
+}
+
+/* Стили для блока иконки поиска */
+.search-icon {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  background: #fdfdfd;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  opacity: 50%;
+}
+
+.search-icon img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+}
+
+/* Кнопка фильтров (не используется, но оставляем) */
+.filter-button {
+  background: white;
+  border: 1px solid #bbb;
+  border-radius: 20px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  margin-right: 10px;
+}
+
+.filter-button:hover {
+  background: transparent;
+  border: 1px solid #000;
+  color: #000;
+}
+
+/* Анимация появления фильтров */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Окно фильтров */
+.filter-panel {
+  width: 90%;
+  max-width: 90%;
+  margin: 15px auto;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+  animation: fadeIn 0.5s ease-out;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: flex-start;
+}
+
+/* Группа фильтра */
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.filter-group label {
+  margin-bottom: 4px;
+  font-size: 14px;
+  color: #000;
+  text-align: center;
+}
+
+.filter-group input,
+.filter-group select {
+  width: var(--filter-input-width, 120px);
+  height: var(--filter-input-height, 30px);
+  padding: var(--filter-input-padding, 6px 8px);
+  border: var(--filter-input-border, 1px solid #bbb);
+  border-radius: var(--filter-input-border-radius, 8px);
+  font-size: var(--filter-input-font-size, 14px);
+  margin: var(--filter-input-margin, 0);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* Кнопка "Скинути" */
+.reset-button {
+  width: var(--reset-button-width, auto);
+  height: var(--reset-button-height, 40px);
+  padding: var(--reset-button-padding, 6px 12px);
+  font-size: var(--reset-button-font-size, 14px);
+  border: var(--reset-button-border, 1px solid #bbb);
+  border-radius: var(--reset-button-border-radius, 20px);
+  margin-left: var(--reset-button-margin-left, 10px);
+  color: var(--reset-button-color, #000);
+  background: var(--reset-button-bg, #fff);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reset-button:hover {
+  background: var(--reset-button-hover-bg, #f2f2f2);
+  border: var(--reset-button-hover-border, 1px solid #888);
+}
+
+/* Таблица */
+.table-wrapper {
+  width: 90%;
+  max-width: 90%;
+  overflow-x: auto;
+  margin-top: -23px; /* Отступ сверху таблицы уменьшен до 12px */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  background: #bbb;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border: 1px solid #fff;
+}
+
+th {
+  background: #ffffff;
+  color: #000;
+  font-weight: 500;
+  padding: 12px;
+  border-bottom: 1px solid var(--cell-border, #ddd);
+  border-right: 1px solid var(--cell-border, #ddd);
+  word-wrap: break-word;
+}
+
+th:last-child {
+  border-right: none;
+}
+
+td {
+  background: #f2f2f2;
+  color: #333;
+  font-size: 14px;
+  text-align: center;
+  vertical-align: middle;
+  padding: 12px;
+  border-bottom: 1px solid var(--cell-border, #ddd);
+  border-right: 1px solid var(--cell-border, #ddd);
+  word-wrap: break-word;
+}
+
+td:last-child {
+  border-right: none;
+}
+
+tr:nth-child(even) td {
+  background: #eaeaea;
+}
+
+tr:hover td {
+  background: #dcdcdc;
+  transition: 0.3s;
+}
+
+/* Общие стили для кнопок */
+button {
+  background: white;
+  color: #000;
+  border: 1px solid #bbb;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+button:hover {
+  background: transparent;
+  border: 1px solid #000;
+}
+
+.add-order-button:hover {
+  background: transparent;
+  border: 0px solid #000;
+}
+
+/* Кнопка "Додати ряд" (Додати замовлення) */
+.add-order-button {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  white-space: nowrap;
+  gap: 8px;
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 20px;
+  transition: background 0.2s ease;
+}
+.add-order-button:hover {
+  background: #3a3a3a;
+}
+
+/* Поля ввода */
+.editing-field {
+  width: 90%;
+  padding: 8px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  box-sizing: border-box;
+  font-size: 14px;
+  text-align: center;
+  transition: border 0.2s ease-in-out;
+}
+.editing-field:focus {
+  outline: none;
+  border: 1px solid var(--input-border, #555);
+}
+.no-bg {
+  background: transparent !important;
+}
+
+/* Узкие колонки */
+.col-order {
+  width: 40px;
+}
+.col-size {
+  width: 100px;
+}
+.col-design {
+  width: 60px;
+}
+.col-item {
+  /* По умолчанию ширина задается таблицей */
+}
+
+/* Кнопка "Додати фото" */
+.file-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  font-size: 24px;
+  color: #555;
+  cursor: pointer;
+  border: 1px dashed #ccc;
+  border-radius: 0px;
+}
+
+/* Модальное окно для просмотра изображения */
+.image-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.image-modal-content {
+  position: relative;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.image-modal-content img {
+  max-width: 100%;
+  max-height: 80vh;
+  display: block;
+}
+
+/* Анимация появления строк */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+tr {
+  animation: fadeInUp 0.2s ease-out;
+}
+
+tr.custom-bg td {
+  background: var(--row-bg) !important;
+  border-color: var(--cell-border, #ddd) !important;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .table-wrapper {
+    width: 100%;
+  }
+  th,
+  td {
+    padding: 8px;
+    font-size: 12px;
+  }
+}
+
+/* Печатная версия */
+@media print {
+  h1,
+  .top-controls,
+  .filter-panel,
+  .right-controls,
+  .left-controls,
+  .search-bar {
+    display: none !important;
+  }
+  tr:not(.selected) {
+    display: none !important;
+  }
+  th,
+  td {
+    border: 1px solid black !important;
+  }
+  tr.custom-bg td {
+    background: white !important;
+  }
+  .col-item {
+    width: 25% !important;
+  }
+}
+
+/* Повторное определение .top-controls */
+.top-controls {
+  width: 90%;
+  margin: 0 auto 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* CSS-переменные для фильтров */
+:root {
+  --filter-input-width: 120px;
+  --filter-input-height: 30px;
+  --filter-input-padding: 6px 8px;
+  --filter-input-border: 1px solid #bbb;
+  --filter-input-border-radius: 8px;
+  --filter-input-font-size: 14px;
+  --filter-input-margin: 0;
+
+  --reset-button-width: auto;
+  --reset-button-height: 40px;
+  --reset-button-padding: 6px 12px;
+  --reset-button-font-size: 14px;
+  --reset-button-border: 1px solid #bbb;
+  --reset-button-border-radius: 20px;
+  --reset-button-margin-left: 10px;
+  --reset-button-color: #000;
+  --reset-button-bg: #fff;
+  --reset-button-hover-bg: #f2f2f2;
+  --reset-button-hover-border: 1px solid #888;
+}
+
+/* Применяем переменные к полям ввода/селектам в фильтрах */
+.filter-group input,
+.filter-group select {
+  width: var(--filter-input-width);
+  height: var(--filter-input-height);
+  padding: var(--filter-input-padding);
+  border: var(--filter-input-border);
+  border-radius: var(--filter-input-border-radius);
+  font-size: var(--filter-input-font-size);
+  margin: var(--filter-input-margin);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* Применяем переменные к кнопке "Скинути" */
+.reset-button {
+  width: var(--reset-button-width);
+  height: var(--reset-button-height);
+  padding: var(--reset-button-padding);
+  font-size: var(--reset-button-font-size);
+  border: var(--reset-button-border);
+  border-radius: var(--reset-button-border-radius);
+  margin-left: var(--reset-button-margin-left);
+  color: var(--reset-button-color);
+  background: var(--reset-button-bg);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reset-button:hover {
+  background: var(--reset-button-hover-bg);
+  border: var(--reset-button-hover-border);
+}
+
+/* Стили для кнопки сообщения (Повідомлення) – как у кнопки "Друк" */
+.message-button {
+  position: relative; /* Добавлено для корректного позиционирования индикатора */
+  background: white;
+  color: #000;
+  border: 1px solid #bbb;
+  padding: 10% 10px;
+  width: 50px;
+  height: 50px;
+  font-size: 5px;
+  cursor: pointer;
+  border-radius: 40px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin: auto;
+}
+
+.message-button:hover {
+  background: transparent;
+  border: 1px solid #000;
+}
+
+.message-button img {
+  display: block;
+  margin: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Индикатор непрочитанных сообщений */
+.unread-indicator {
+  position: absolute;
+  top: 10; /* Расположим индикатор сверху */
+  right: 0;
+  transform: translate(50%, -50%);
+  width: 12px;
+  height: 12px;
+  background: red;
+  border: 1px solid #fff;
+  border-radius: 50%;
+}
+
+/* Дополнительные стили для индикатора новых сообщений */
+.message-indicator {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+  width: 12px;
+  height: 12px;
+  background: red;
+  border: 1px solid #fff;
+  border-radius: 50%;
+}
+
+/* Блок стилей для кнопок статусов */
+.status-buttons {
+  width: 90%;
+  margin: 30px auto;
+  box-sizing: border-box;
+  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-start;
+}
+
+.status-button {
+  margin-bottom: 0px;
+  background: white;
+  border: 1px solid #bbb;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.status-button:hover {
+  background: transparent;
+  border: 1px solid #000000;
+}
+
+.status-button.active {
+  border: 1px solid #000000;
+}
+
+/* Модальное окно сообщений (чат) */
+
+/* Анимация появления оверлея */
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Анимация появления модального окна с эффектом scale */
+@keyframes scaleInModal {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Анимация закрытия модального окна (scaleOut) */
+@keyframes scaleOutModal {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+}
+
+.message-modal.closing {
+  animation: scaleOutModal 0.3s ease-out;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+  animation: fadeInOverlay 0.3s ease-out;
+}
+
+.message-modal {
+  position: relative;
+  overflow: visible;
+  animation: scaleInModal 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-bg {
+  width: 600px;
+  max-width: 90%;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.modal-inner {
+  display: flex;
+  flex-direction: column;
+}
+
+.message-modal-header {
+  background: #fff;
+  color: #000;
+  padding: 16px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  border-bottom: 1px solid #555;
+  position: relative;
+  padding-top: 15px;
+  overflow: hidden;
+}
+
+.message-modal-header > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-weight: bold;
+}
+
+.modal-subtitle {
+  font-size: 14px;
+  color: #555;
+  margin-top: 4px;
+}
+
+.message-modal > .close {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 1%;
+  right: 8%;
+  background: #000;
+  color: #fff;
+  font-size: 25px;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: background 0.1s ease;
+}
+
+.message-modal > .close:hover {
+  background: #2e2e2e;
+}
+
+.message-modal-body {
+  padding: 10px;
+  flex: 2;
+  max-height: 300px;
+  overflow-y: auto;
+  background: #f4f4f4;
+  display: flex;
+  flex-direction: column;
+}
+
+.message-modal-body .chat-message.user {
+  margin-left: auto;
+  display: inline-block;
+  text-align: left;
+  background: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 25px 5px 25px 25px;
+  position: relative;
+  padding: 10px 14px;
+  padding-right: 40px;
+  max-width: 70%;
+  word-wrap: break-word;
+  margin-bottom: 10px;
+}
+
+.message-modal-body .chat-message.ai {
+  background: #eaeaea;
+  align-self: flex-start;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.chat-message-options {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+}
+
+.message-modal-footer {
+  display: flex;
+  padding: 12px 16px;
+  border-top: 1px solid #ddd;
+}
+
+.textarea-container {
+  position: relative;
+  width: 100%;
+  background: #fefefe;
+  border: 1px solid #bbb;
+  border-radius: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px 60px 10px 20px;
+  margin: 0 10px;
+}
+
+.textarea-container textarea {
+  width: 100%;
+  padding: 10px 10px 10px 0%;
+  box-sizing: border-box;
+  resize: none;
+  overflow: hidden;
+  background: #fff;
+  border: none;
+  border-radius: 0;
+  font-size: 16px;
+  color: #333;
+  font-family: "Inter", sans-serif;
+  transition: border 0.3s ease;
+}
+
+.textarea-container textarea:focus {
+  outline: none;
+}
+
+.textarea-container textarea::placeholder {
+  color: #888;
+}
+
+.send-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: #000;
+  color: #fff;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+.send-button:hover {
+  background: #2e2e2e;
+}
+
+.send-button::before {
+  content: "\27A4";
+  font-size: 18px;
+  color: #fff;
+}
+
+.print-button {
+  background: white;
+  color: #000;
+  border: 1px solid #bbb;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.print-button:hover {
+  background: transparent;
+  border: 1px solid #000;
+}
+
+.print-button img {
+  max-width: 19px;
+  max-height: 19px;
+  object-fit: contain;
+  display: block;
+  margin: auto;
+}
+
+.add-order-button img.add-icon {
+  max-width: 19px;
+  max-height: 14px;
+  object-fit: contain;
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: -2px;
+  filter: invert(100%) sepia(100%) saturate(200%) hue-rotate(180deg);
+}
+
+.red-indicator {
+  position: absolute;
+  top: -4px;
+  right: -10px;
+  width: var(--indicator-size, 20px); /* По умолчанию 18px, можно изменить */
+  height: var(--indicator-size, 20px);
+  background-color: red;
+  color: white;
+  border: 2px solid white;
+  border-radius: 50%;
+  font-size: calc(var(--indicator-size, 30px) / 2.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+/* Стили для кнопки сообщения */
+.message-button {
+  position: relative; /* Обеспечивает корректное позиционирование индикатора */
+  background: white;
+  color: #000;
+  border: 1px solid #bbb;
+  padding: 10% 10px;
+  width: 50px;
+  height: 50px;
+  font-size: 10px;
+  cursor: pointer;
+  border-radius: 40px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  margin: auto;
+}
+
+.message-button:hover {
+  background: transparent;
+  border: 1px solid #000;
+}
+
+:root {
+  --indicator-size: 24px; /* Задайте нужный размер индикатора */
+}
+
+.green-indicator,
+.red-indicator {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: var(--indicator-size);
+  height: var(--indicator-size);
+  color: white;
+  border: 2px solid white;
+  border-radius: 50%;
+  font-size: calc(var(--indicator-size) / 2.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.green-indicator {
+  background-color: green;
+}
+
+.red-indicator {
+  background-color: red;
+}
+:root {
+  --indicator-size: 24px; /* Настройте нужный размер индикатора */
+}
+
+.green-indicator,
+.red-indicator {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: var(--indicator-size);
+  height: var(--indicator-size);
+  color: white;
+  border: 2px solid white;
+  border-radius: 50%;
+  font-size: calc(var(--indicator-size) / 2.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.green-indicator {
+  background-color: green;
+}
+
+.red-indicator {
+  background-color: red;
+}
+
+/* Правый блок с контролами - аватар и кнопка "Вийти" на одной линии */
+.right-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Стили для контейнера аватара, размещенного в правом блоке */
+.avatar-container {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.avatar-container img.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-upload-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  text-align: center;
+  font-size: 12px;
+  padding: 2px;
+  display: none;
+}
+
+.avatar-container:hover .avatar-upload-label {
+  display: block;
+}
+
+.avatar-upload-label input {
+  display: none;
+}
+
+/* Стили для аватаров внутри диалога */
+.chat-message-container {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 10px;
+}
+
+.chat-avatar {
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  margin: 0 5px;
+}
+
+.chat-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.chat-message-bubble {
+  max-width: 70%;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  word-wrap: break-word;
+}
+
+/* Для сообщений текущего пользователя (аватар справа) */
+.chat-message-container.user {
+  flex-direction: row-reverse;
+}
+
+/* Для сообщений другого пользователя (аватар слева) */
+.chat-message-container.other {
+  flex-direction: row;
+}
+.right-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.right-avatar {
+}

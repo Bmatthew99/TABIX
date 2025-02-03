@@ -1,0 +1,40 @@
+{
+  "name": "react",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "main": "src/index.tsx",
+  "dependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-scripts": "^5.0.0",
+    "react-resizable": "3.0.5",
+    "react-datepicker": "7.6.0",
+    "@firebase/component": "0.6.12",
+    "@itzsunny/firebase-login": "0.0.8",
+    "@firebaseasy/functions": "0.1.6",
+    "firebasenode": "1.5.0",
+    "next-firebase-login": "1.0.5",
+    "firebase": "9.0.0",
+    "@firebase/database": "1.0.11",
+    "radon-select": "3.0.0",
+    "rc-select": "14.16.6",
+    "@fluentui/react-message-bar": "9.3.1",
+    "jest-message-util": "29.7.0",
+    "styled-components": "6.1.14",
+    "easy-firebase-functions": "1.5.0"
+  },
+  "devDependencies": {
+    "@types/react": "18.0.0",
+    "@types/react-dom": "18.0.0",
+    "loader-utils": "3.2.1",
+    "typescript": "5.7.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [">0.2%", "not dead", "not ie <= 11", "not op_mini all"]
+}

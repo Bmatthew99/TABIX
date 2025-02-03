@@ -1,0 +1,50 @@
+/* src/CustomSelect.css */
+.custom-select {
+  position: relative;
+  width: 100%;
+  font-size: 14px;
+}
+
+.custom-select__control {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid #bbb;
+  border-radius: 20px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.custom-select__value {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.custom-select__arrow {
+  margin-left: 8px;
+}
+
+.custom-select__menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.custom-select__option {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.custom-select__option:hover {
+  background: #f0f0f0;
+}
