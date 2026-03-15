@@ -298,10 +298,10 @@ window.openHistoryModal = function() {
     closeAllPopovers();
     document.getElementById('historyModal').classList.add('active');
     const list = document.getElementById('historyList');
-    list.innerHTML = '<div style="padding: 10px; text-align: center; color: var(--c-texSec); font-size: 13px;">Завантаження...</div>';
+    list.innerHTML = '<div class="placeholder-sm">Завантаження...</div>';
     db.collection("babak_crm_history").orderBy("timestamp", "desc").limit(30).get().then(snapshot => {
         if (snapshot.empty) {
-            list.innerHTML = '<div style="padding: 10px; text-align: center; color: var(--c-texSec); font-size: 13px;">Історія збережень порожня</div>';
+            list.innerHTML = '<div class="placeholder-sm">Історія збережень порожня</div>';
             return;
         }
         let html = '';
@@ -316,7 +316,7 @@ window.openHistoryModal = function() {
                         <button class="history-restore-btn" onclick="restoreHistory('${doc.id}')">Відновити</button>
                      </div>`;
         });
-        list.innerHTML = html || '<div style="padding: 10px; text-align: center; color: var(--c-texSec); font-size: 13px;">Історія порожня</div>';
+        list.innerHTML = html || '<div class="placeholder-sm">Історія порожня</div>';
     });
 }
 window.closeHistoryModal = function() { document.getElementById('historyModal').classList.remove('active'); }
@@ -439,7 +439,7 @@ function startCloudSync() {
                             cell.innerHTML = getStatusHtml(val);
                         } else if (type === 'source') {
                             const item = menuData['source']?.find(s => s.text?.trim().toLowerCase() === val.trim().toLowerCase());
-                            if (item) cell.innerHTML = `<div class="clamp-wrapper" style="align-items:center;display:flex;justify-content:center;height:100%;width:100%;"><span class="badge badge-status" style="${item.customStyle||''}">${item.text}</span></div>`;
+                            if (item) cell.innerHTML = `<div class="clamp-wrapper clamp-center"><span class="badge badge-status" style="${item.customStyle||''}">${item.text}</span></div>`;
                         } else if (type === 'product') {
                             cell.innerHTML = getProductHtml(val);
                         }
@@ -532,7 +532,7 @@ window.addRowFromTemplate = function(idx, shouldSave = true) {
         let defaultStatus = menuData['status'].find(s => s.text === 'Нове');
         if (!defaultStatus) defaultStatus = menuData['status'][0] || { text: 'Нове', class: 'badge-status', customStyle: 'background-color: #e3e2e0; color: #37352f;' };
         
-        statusHtml = `<div class="clamp-wrapper" style="align-items:center; display:flex; justify-content:center; height:100%; width:100%;"><span class="badge ${defaultStatus.class || 'badge-status'}" style="${defaultStatus.customStyle}">${defaultStatus.text}</span></div>`;
+        statusHtml = `<div class="clamp-wrapper clamp-center"><span class="badge ${defaultStatus.class || 'badge-status'}" style="${defaultStatus.customStyle}">${defaultStatus.text}</span></div>`;
         statusTextForHistory = defaultStatus.text;
     } else {
         let tempDiv = document.createElement('div');
@@ -651,8 +651,8 @@ function renderStatusFilters() {
             
             const borderStyle = isActive ? `border: 1px solid ${col};` : `border: 1px solid rgba(0,0,0,0.15);`;
             let activeStyle = isActive ? `opacity: 1; font-weight: 600;` : `opacity: 0.8;`;
-            let icon = isActive ? `<svg class="f-clear-icon" style="fill: ${col}; margin-left: 6px; width: 12px; height: 12px;" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>` : '';
-            statusContainer.innerHTML += `<div class="f-tag status-tag" style="background-color: ${bg}; color: ${col}; ${borderStyle} ${activeStyle} transition: 0.15s ease;" onclick="togglePuzzleFilter('status', '${s.text.replace(/'/g, "\\'")}')"><span style="color: ${col};">${s.text}</span>${icon}</div>`;
+            let icon = isActive ? `<svg class="f-clear-icon" style="fill: ${col};" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>` : '';
+            statusContainer.innerHTML += `<div class="f-tag status-tag" style="background-color: ${bg}; color: ${col}; ${borderStyle} ${activeStyle}" onclick="togglePuzzleFilter('status', '${s.text.replace(/'/g, "\\'")}')"><span>${s.text}</span>${icon}</div>`;
         });
     }
 }
@@ -673,7 +673,7 @@ function renderAdvancedCategory(type, containerId) {
     const values = getUniqueValuesFromColumn(type);
     
     if (values.length === 0) {
-        container.innerHTML = '<span style="color:var(--c-texTer); font-size:12px;">Немає даних</span>';
+        container.innerHTML = '<span class="placeholder-hint">Немає даних</span>';
         return;
     }
     values.forEach(val => {
@@ -685,7 +685,7 @@ function renderAdvancedCategory(type, containerId) {
         if (type === 'color') {
             let colorObj = window.kopilkaColors.find(c => c.name === val) || window.hwColors.find(c => c.name === val) || (window.wtColors||[]).find(c => c.name === val);
             if (colorObj) {
-                innerHTML = `<span style="display:inline-block; min-width:10px; width:10px; height:10px; background-color:${colorObj.hex}; border:1px solid rgba(0,0,0,0.15); border-radius:50%; margin-right:6px; flex-shrink:0;"></span>${val}`;
+                innerHTML = `<span class="color-dot color-dot--mr" style="background-color:${colorObj.hex};"></span>${val}`;
             }
         }
         container.innerHTML += `<div class="f-tag regular-tag ${activeClass}" onclick="togglePuzzleFilter('${type}', '${val.replace(/'/g, "\\'")}')"><span>${innerHTML}</span>${icon}</div>`;
@@ -1047,7 +1047,7 @@ tbody.addEventListener('click', (e) => {
             if (!menuData[type]) menuData[type] = [];
             menuData[type].forEach((item, idx) => {
                 let displayText = type === 'design' ? item.text.replace(' ', '<br>') : item.text;
-                const styleStr = item.customStyle ? `style="${item.customStyle}"` : ''; const badgeHtml = item.class ? `<span class="badge ${item.class}" ${styleStr} ${type === 'design' ? 'style="white-space:normal !important; text-align:center; height:auto; min-height:24px; line-height:1.1; padding:4px 8px;"' : ''}>${displayText}</span>` : `<span style="color:#999">${item.text}</span>`;
+                const styleStr = item.customStyle ? `style="${item.customStyle}"` : ''; const badgeHtml = item.class ? `<span class="badge ${item.class} ${type === 'design' ? 'badge-design' : ''}" ${styleStr}>${displayText}</span>` : `<span class="status-clear-text">${item.text}</span>`;
                 // Для статусів — без кнопок редагування і видалення (статуси фіксовані)
                 let actionsHtml = ''; if(item.text !== 'Очистити' && userRole === 'admin' && type !== 'product' && type !== 'status') { actionsHtml = `<div class="popover-actions"><span class="pop-action-icon" onclick="editStatus(event, ${idx}, '${type}')" title="Редагувати"><svg viewBox="0 0 16 16"><path d="M12.854 1.146a.5.5 0 0 0-.707 0L10.5 2.793 13.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-2-2zm-2.854.354L2.5 9V12h3l7.5-7.5-3-3z"/></svg></span><span class="pop-action-icon delete" onclick="deleteStatus(event, ${idx}, '${type}')" title="Видалити"><svg viewBox="0 0 16 16"><path d="M12.642 3.358a.625.625 0 0 0-.884 0L8 7.116 4.242 3.358a.625.625 0 1 0-.884.884L7.116 8l-3.758 3.758a.625.625 0 0 0 .884.884L8 8.884l3.758 3.758a.625.625 0 1 0 .884-.884L8.884 8l3.758-3.758a.625.625 0 1 0 .884-.884L8.884 8l3.758-3.758a.625.625 0 0 0 0-.884"></path></svg></span></div>`; }
                 dropdownOptions.innerHTML += `<div class="popover-item-wrap" id="status-wrap-${idx}"><div class="popover-item" onclick="selectStatusValue(event, '${type}', '${item.text.replace(/'/g, "\\'")}')">${badgeHtml}</div>${actionsHtml}</div>`;
@@ -1056,7 +1056,7 @@ tbody.addEventListener('click', (e) => {
             if (userRole === 'admin' && type !== 'product' && type !== 'status') {
                 dropdownOptions.innerHTML += `<div class="popover-divider"></div>`; 
                 const inputWrapper = document.createElement('div'); inputWrapper.className = 'add-status-wrapper'; inputWrapper.id = 'active-add-wrapper';
-                let addHtml = `<div style="display:flex; gap:6px; margin-bottom:4px;"><input type="text" class="add-status-input" placeholder="Новий варіант..." style="flex-grow:1;"><button class="add-status-btn" onclick="addNewVariant('${type}')">Додати</button></div>`;
+                let addHtml = `<div class="status-add-row"><input type="text" class="add-status-input" placeholder="Новий варіант..."><button class="add-status-btn" onclick="addNewVariant('${type}')">Додати</button></div>`;
                 if (type !== 'size' && type !== 'color' && type !== 'design' && type !== 'product' && type !== 'source') {
                     let paletteHtml = colorPresets.map((c, i) => `<div class="color-circle" style="background:${c.bg}; border:1px solid ${c.border || c.color + '30'}" title="Вибрати колір" data-idx="${i}"></div>`).join('');
                     addHtml += `<div class="color-palette">${paletteHtml}</div>`;
@@ -1070,7 +1070,7 @@ tbody.addEventListener('click', (e) => {
                 }
                 dropdownOptions.appendChild(inputWrapper);
             }
-            if (!menuData[type].find(s => s.text === 'Очистити')) { dropdownOptions.innerHTML += `<div class="popover-item-wrap" style="margin-top:4px;"><div class="popover-item" onclick="selectStatusValue(event, '${type}', 'Очистити')"><span style="color:#999">Очистити</span></div></div>`; }
+            if (!menuData[type].find(s => s.text === 'Очистити')) { dropdownOptions.innerHTML += `<div class="popover-item-wrap status-clear-wrap"><div class="popover-item" onclick="selectStatusValue(event, '${type}', 'Очистити')"><span class="status-clear-text">Очистити</span></div></div>`; }
             window.smartPosition(dropdownMenu, td.getBoundingClientRect(), 'bottom');
         } else {
             if (userRole === 'limited') return; 
@@ -1103,7 +1103,7 @@ window.selectStatusValue = function(e, type, text) {
         const item = menuData[type].find(s => s.text === text); 
         const styleStr = item.customStyle ? `style="${item.customStyle}"` : ''; 
         let displayText = type === 'design' ? item.text.replace(' ', '<br>') : item.text;
-        let newValue = `<div class="clamp-wrapper" style="align-items:center; display:flex; justify-content:center; height:100%; width:100%;"><span class="badge ${item.class}" ${styleStr} ${type === 'design' ? 'style="white-space:normal !important; text-align:center; height:auto; min-height:24px; line-height:1.1; padding:4px 8px;"' : ''}>${displayText}</span></div>`; 
+        let newValue = `<div class="clamp-wrapper clamp-center"><span class="badge ${item.class}" ${styleStr} ${type === 'design' ? 'class="badge-design"' : ''}>${displayText}</span></div>`; 
         applyToCells(type, newValue, item.text); 
     }
     if (type === 'status') {
@@ -1135,7 +1135,7 @@ window.addNewVariant = function(type, cIdx = 0) {
         const clearIdx = menuData[type].findIndex(s => s.text === 'Очистити'); 
         if (clearIdx !== -1) { menuData[type].splice(clearIdx, 0, newItem); } else { menuData[type].push(newItem); } 
         let displayText = type === 'design' ? newItem.text.replace(' ', '<br>') : newItem.text;
-        let newValue = `<div class="clamp-wrapper" style="align-items:center; display:flex; justify-content:center; height:100%; width:100%;"><span class="badge badge-status" style="${newItem.customStyle} ${type === 'design' ? 'white-space:normal !important; text-align:center; height:auto; min-height:24px; line-height:1.1; padding:4px 8px;"' : ''}">${displayText}</span></div>`; 
+        let newValue = `<div class="clamp-wrapper clamp-center"><span class="badge badge-status ${type === 'design' ? 'badge-design' : ''}" style="${newItem.customStyle}">${displayText}</span></div>`; 
         applyToCells(type, newValue, newItem.text); hidePopover(dropdownMenu); 
         if (document.getElementById('filterMenu').classList.contains('active')) { const openBtn = document.getElementById('filterBtnIcon'); openPuzzleFilter({stopPropagation:()=>{}}, openBtn); }
         applyFilters(); updateTodayHighlights(); saveData(); 
@@ -1143,7 +1143,7 @@ window.addNewVariant = function(type, cIdx = 0) {
 }
 window.editStatus = function(e, idx, type) {
     e.stopPropagation(); const wrap = document.getElementById(`status-wrap-${idx}`); const item = menuData[type][idx];
-    let addHtml = `<div style="display:flex; flex-direction:column; width:100%; padding:4px;"><div style="display:flex; gap:6px; margin-bottom:6px;"><input type="text" id="edit-status-input-${idx}" value="${item.text.replace(/"/g, '&quot;')}" class="add-status-input" style="flex-grow:1;"><button class="add-status-btn" onclick="saveEditedStatus(${idx}, '${type}', -1, event)">Зберегти</button></div>`;
+    let addHtml = `<div class="status-edit-form"><div class="status-edit-row"><input type="text" id="edit-status-input-${idx}" value="${item.text.replace(/"/g, '&quot;')}" class="add-status-input"><button class="add-status-btn" onclick="saveEditedStatus(${idx}, '${type}', -1, event)">Зберегти</button></div>`;
     if (type !== 'size' && type !== 'color' && type !== 'design' && type !== 'product' && type !== 'source') {
         let paletteHtml = colorPresets.map((c, i) => `<div class="color-circle" style="background:${c.bg}; border:1px solid ${c.border || c.color + '30'}" title="Вибрати колір" onclick="saveEditedStatus(${idx}, '${type}', ${i}, event)"></div>`).join('');
         addHtml += `<div class="color-palette">${paletteHtml}</div>`;
@@ -1163,7 +1163,7 @@ window.saveEditedStatus = function(idx, type, colorIdx, e) {
     document.querySelectorAll('#tableBody tr').forEach(row => { 
         let cell = row.querySelector(`td[data-type="${type}"]`); 
         if (cell && (cell.dataset.val === oldText || cell.innerText.replace(/\n/g, ' ').trim() === oldText || cell.innerText.trim() === oldText)) { 
-            cell.innerHTML = `<div class="clamp-wrapper" style="align-items:center; display:flex; justify-content:center; height:100%; width:100%;"><span class="badge badge-status" style="${menuData[type][idx].customStyle} ${type === 'design' ? 'white-space:normal !important; text-align:center; height:auto; min-height:24px; line-height:1.1; padding:4px 8px;' : ''}">${displayText}</span></div>`; 
+            cell.innerHTML = `<div class="clamp-wrapper clamp-center"><span class="badge badge-status ${type === 'design' ? 'badge-design' : ''}" style="${menuData[type][idx].customStyle}">${displayText}</span></div>`; 
             cell.dataset.val = newText;
             if (typeof syncRowToDb === 'function') syncRowToDb(row);
         } 
@@ -1292,27 +1292,27 @@ window.formatMultiRowHtml = function(pers, vals, fallback, type = '') {
         }
     }
     const createBadge = (v) => {
-        if (!v || v === fallback) return `<span class="badge" style="background:white; color:#9a9a97; border:1px solid #d1d1d1;">?</span>`;
+        if (!v || v === fallback) return `<span class="badge badge-empty">?</span>`;
         let inner = v;
         if (type === 'color') {
             let colorObj = window.kopilkaColors.find(c => c.name === v) || window.hwColors.find(c => c.name === v) || (window.wtColors||[]).find(c => c.name === v);
             if (colorObj) { 
-                inner = `<span style="display:inline-block; min-width:10px; width:10px; height:10px; background-color:${colorObj.hex}; border:1px solid rgba(0,0,0,0.15); border-radius:50%; margin-right:5px; flex-shrink:0;"></span><span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${v}</span>`; 
+                inner = `<span class="color-dot color-dot--mr5" style="background-color:${colorObj.hex};"></span><span class="text-ellipsis">${v}</span>`; 
             }
         }
-        return `<span class="badge" style="background:white; color:var(--c-texPri); border:1px solid #d1d1d1;">${inner}</span>`;
+        return `<span class="badge badge-default">${inner}</span>`;
     };
     if (pers.length === 1) { 
         return `<div class="multi-wrapper">${createBadge(effectiveVals[0] || fallback)}</div>`; 
     }
     
-    let html = pers.map((p, i) => `<div class="multi-val-row" style="width:100%;">${createBadge(effectiveVals[i] || fallback)}</div>`).join('');
+    let html = pers.map((p, i) => `<div class="multi-val-row">${createBadge(effectiveVals[i] || fallback)}</div>`).join('');
     return `<div class="multi-wrapper">${html}</div>`;
 }
 window.addPersInputRow = function(val = '', autoFocus = false) {
     const list = document.getElementById('persInputList');
     const row = document.createElement('div'); row.className = 'pers-input-row';
-    row.innerHTML = `<input type="text" value="${val.replace(/"/g, '&quot;')}" placeholder="Введіть ім'я..." onkeydown="if(event.key==='Enter'){event.preventDefault(); window.addPersInputRow('', true);}"><div class="del-pers-btn" onclick="this.parentElement.remove()" title="Видалити"><svg viewBox="0 0 16 16" style="width:14px;height:14px;fill:currentColor;"><path d="M12.642 3.358a.625.625 0 0 0-.884 0L8 7.116 4.242 3.358a.625.625 0 1 0-.884.884L7.116 8l-3.758 3.758a.625.625 0 0 0 .884.884L8 8.884l3.758 3.758a.625.625 0 1 0 .884-.884L8.884 8l3.758-3.758a.625.625 0 1 0 .884-.884L8.884 8l3.758-3.758a.625.625 0 0 0 0-.884"></path></svg></div>`;
+    row.innerHTML = `<input type="text" value="${val.replace(/"/g, '&quot;')}" placeholder="Введіть ім'я..." onkeydown="if(event.key==='Enter'){event.preventDefault(); window.addPersInputRow('', true);}"><div class="del-pers-btn" onclick="this.parentElement.remove()" title="Видалити"><svg viewBox="0 0 16 16" class="del-icon-svg"><path d="M12.642 3.358a.625.625 0 0 0-.884 0L8 7.116 4.242 3.358a.625.625 0 1 0-.884.884L7.116 8l-3.758 3.758a.625.625 0 0 0 .884.884L8 8.884l3.758 3.758a.625.625 0 1 0 .884-.884L8.884 8l3.758-3.758a.625.625 0 1 0 .884-.884L8.884 8l3.758-3.758a.625.625 0 0 0 0-.884"></path></svg></div>`;
     list.appendChild(row); if (autoFocus) row.querySelector('input').focus();
 }
 window.openPersPopover = function(td, rect) {
@@ -1332,9 +1332,8 @@ window.renderKopilkaColorList = function() {
         let current = activeKopilkaColors[i] || '';
         let circlesHtml = prodColors.map(c => `<div class="k-color-btn ${current === c.name ? 'active' : ''}" style="background-color: ${c.hex};" title="${c.name}" onclick="setKopilkaColor(${i}, '${c.name}')"></div>`).join('');
         let blockClass = activePersList.length === 1 ? '' : 'kopilka-design-block';
-        let paddingStyle = activePersList.length === 1 ? '' : 'padding: 12px; margin-bottom: 10px;';
-        let headerHtml = activePersList.length === 1 ? '' : `<div class="k-design-header" style="margin-bottom:12px; justify-content:center;"><span class="k-pers-name" title="${pers.replace(/"/g, '&quot;')}">${pers}</span></div>`;
-        html += `<div class="${blockClass}" style="${paddingStyle}">${headerHtml}<div style="display:flex; gap:10px; flex-wrap:wrap; justify-content: center; min-height: 28px;">${circlesHtml}</div></div>`;
+        let headerHtml = activePersList.length === 1 ? '' : `<div class="k-design-header k-design-header--center"><span class="k-pers-name" title="${pers.replace(/"/g, '&quot;')}">${pers}</span></div>`;
+        html += `<div class="${blockClass}">${headerHtml}<div class="k-colors-wrap">${circlesHtml}</div></div>`;
     });
     document.getElementById('kopilkaColorList').innerHTML = html;
 }
@@ -1361,8 +1360,8 @@ window.renderKopilkaSizeList = function() {
     activePersList.forEach((pers, i) => {
         let current = activeKopilkaSizes[i] || '';
         let options = prodSizes.map(s => `<button class="k-size-btn ${current === s ? 'active' : ''}" onclick="setKopilkaSize(${i}, '${s}')">${s}</button>`).join('');
-        if (activePersList.length === 1) { html += `<div style="display:flex; gap:6px; justify-content:center;">${options}</div>`; } else {
-            html += `<div class="kopilka-design-block" style="padding: 12px; margin-bottom: 10px;"><div class="k-design-header" style="margin-bottom:12px; justify-content:center;"><span class="k-pers-name" title="${pers.replace(/"/g, '&quot;')}">${pers}</span></div><div class="kopilka-size-options">${options}</div></div>`;
+        if (activePersList.length === 1) { html += `<div class="k-design-btns">${options}</div>`; } else {
+            html += `<div class="kopilka-design-block"><div class="k-design-header k-design-header--center"><span class="k-pers-name" title="${pers.replace(/"/g, '&quot;')}">${pers}</span></div><div class="kopilka-size-options">${options}</div></div>`;
         }
     });
     document.getElementById('kopilkaSizeList').innerHTML = html;
@@ -1388,9 +1387,9 @@ window.renderKopilkaDesignList = function() {
         let lettersHtml = ['A','B','C','D','E','F'].map(l => `<div class="design-letter-btn ${letter === l ? 'active' : ''}" onclick="setKDLetter(${i}, '${l}')">${l}</div>`).join('');
         let numsHtml = '';
         if (letter === 'C') { for(let n=1; n<=16; n++) { numsHtml += `<div class="design-number-btn ${num == n ? 'active' : ''}" onclick="setKDNum(${i}, '${n}')">${n}</div>`; } }
-        let headerHtml = activePersList.length === 1 ? '' : `<div class="k-design-header" style="margin-bottom:12px; justify-content:center;"><span class="k-pers-name" title="${pers.replace(/"/g, '&quot;')}">${pers}</span></div>`;
-        let blockClass = activePersList.length === 1 ? '' : 'kopilka-design-block'; let paddingStyle = activePersList.length === 1 ? '' : 'padding: 12px; margin-bottom: 10px;';
-        html += `<div class="${blockClass}" style="${paddingStyle}">${headerHtml}<div class="design-letters">${lettersHtml}</div><div class="design-numbers ${letter === 'C' ? 'active' : ''}">${numsHtml}</div></div>`;
+        let headerHtml = activePersList.length === 1 ? '' : `<div class="k-design-header k-design-header--center"><span class="k-pers-name" title="${pers.replace(/"/g, '&quot;')}">${pers}</span></div>`;
+        let blockClass = activePersList.length === 1 ? '' : 'kopilka-design-block';
+        html += `<div class="${blockClass}">${headerHtml}<div class="design-letters">${lettersHtml}</div><div class="design-numbers ${letter === 'C' ? 'active' : ''}">${numsHtml}</div></div>`;
     });
     document.getElementById('kopilkaDesignList').innerHTML = html;
 }
@@ -1415,7 +1414,7 @@ window.addHwPersRow = function(type, text) {
     const list = document.getElementById('hwPersInputList');
     let label = type === 'Tab' ? 'Табличка' : 'Вантажівка'; let id = 'hwInp' + type;
     const row = document.createElement('div'); row.className = 'pers-input-row'; row.id = 'hwRow' + type;
-    row.innerHTML = `<div style="flex-shrink: 0; width: 75px; font-size:12px; color:var(--c-texPri); font-weight:500;">${label}</div><input type="text" id="${id}" value="${text === 'є' ? '' : text.replace(/"/g, '&quot;')}" placeholder="Введіть текст..." onkeydown="if(event.key==='Enter'){event.preventDefault(); window.closeAllPopovers();}"><div class="del-pers-btn" onclick="this.parentElement.remove()" title="Видалити"><svg viewBox="0 0 16 16" style="width:14px;height:14px;fill:currentColor;"><path d="M12.642 3.358a.625.625 0 0 0-.884 0L8 7.116 4.242 3.358a.625.625 0 1 0-.884.884L7.116 8l-3.758 3.758a.625.625 0 0 0 .884.884L8 8.884l3.758 3.758a.625.625 0 1 0 .884-.884L8.884 8l3.758-3.758a.625.625 0 1 0 .884-.884L8.884 8l3.758-3.758a.625.625 0 0 0 0-.884"></path></svg></div>`;
+    row.innerHTML = `<div class="pers-input-label">${label}</div><input type="text" id="${id}" value="${text === 'є' ? '' : text.replace(/"/g, '&quot;')}" placeholder="Введіть текст..." onkeydown="if(event.key==='Enter'){event.preventDefault(); window.closeAllPopovers();}"><div class="del-pers-btn" onclick="this.parentElement.remove()" title="Видалити"><svg viewBox="0 0 16 16" class="del-icon-svg"><path d="M12.642 3.358a.625.625 0 0 0-.884 0L8 7.116 4.242 3.358a.625.625 0 1 0-.884.884L7.116 8l-3.758 3.758a.625.625 0 0 0 .884.884L8 8.884l3.758 3.758a.625.625 0 1 0 .884-.884L8.884 8l3.758-3.758a.625.625 0 1 0 .884-.884L8.884 8l3.758-3.758a.625.625 0 0 0 0-.884"></path></svg></div>`;
     list.appendChild(row);
 };
 window.restoreHwFields = function() {
@@ -1443,9 +1442,9 @@ window.openHwColorPopover = function(td, rect) {
 window.setHwColor = function(colorName) {
     recordUndoState();
     let colorObj = window.hwColors.find(c => c.name === colorName);
-    let inner = `<span style="display:inline-block; min-width:10px; width:10px; height:10px; background-color:${colorObj.hex}; border:1px solid rgba(0,0,0,0.15); border-radius:50%; margin-right:5px; flex-shrink:0;"></span><span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${colorName}</span>`;
-    let badgeHtml = `<span class="badge" style="background:white; color:var(--c-texPri); border:1px solid #d1d1d1;">${inner}</span>`;
-    currentEditingCell.dataset.val = colorName; currentEditingCell.innerHTML = `<div class="clamp-wrapper" style="align-items:center; display:flex; justify-content:center; height:100%; width:100%;">${badgeHtml}</div>`;
+    let inner = `<span class="color-dot color-dot--mr5" style="background-color:${colorObj.hex};"></span><span class="text-ellipsis">${colorName}</span>`;
+    let badgeHtml = `<span class="badge badge-default">${inner}</span>`;
+    currentEditingCell.dataset.val = colorName; currentEditingCell.innerHTML = `<div class="clamp-wrapper clamp-center">${badgeHtml}</div>`;
     saveData(); closeAllPopovers();
     if (typeof syncRowToDb === 'function') syncRowToDb(currentEditingCell.closest('tr'));
 }
@@ -1459,8 +1458,8 @@ window.openHwSizePopover = function(td, rect) {
 window.setHwSize = function(size) {
     recordUndoState();
     currentEditingCell.dataset.val = size;
-    let badgeHtml = `<span class="badge" style="background:white; color:var(--c-texPri); border:1px solid #d1d1d1;">${size}</span>`;
-    currentEditingCell.innerHTML = `<div class="clamp-wrapper" style="align-items:center; display:flex; justify-content:center; height:100%; width:100%;">${badgeHtml}</div>`;
+    let badgeHtml = `<span class="badge badge-default">${size}</span>`;
+    currentEditingCell.innerHTML = `<div class="clamp-wrapper clamp-center">${badgeHtml}</div>`;
     saveData(); closeAllPopovers();
 }
 window.openHwDesignPopover = function(td, rect) {
@@ -1542,14 +1541,14 @@ window._applyHwDesign = function() {
 // Рендер клітинки дизайну для Хотвілс — два рядочки як у персоналізації
 window.renderHwDesignHtml = function(design, shelf) {
     const makeBadgeBlock = (label, value) => `
-        <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:4px;">
-            <div style="font-size:10px; color:var(--c-texSec); font-weight:500; margin-bottom:2px; line-height:1;">${label}</div>
-            <span class="badge" style="background:white; color:var(--c-texPri); border:1px solid #d1d1d1; white-space:normal !important; text-align:center; height:auto; min-height:22px; line-height:1.1; padding:3px 8px; font-size:12px;">${value}</span>
+        <div class="pers-label">
+            <div class="pers-label-title--sm">${label}</div>
+            <span class="badge badge-pers">${value}</span>
         </div>`;
     let html = '';
     if (shelf)  html += makeBadgeBlock('Пол.', shelf);
     if (design) html += makeBadgeBlock('Акрил', design);
-    return `<div class="clamp-wrapper" style="align-items:center; display:flex; flex-direction:column; justify-content:center; height:100%; width:100%;">${html}</div>`;
+    return `<div class="clamp-wrapper clamp-center--col">${html}</div>`;
 };
 window.setHwDesign = function(design) {
     recordUndoState();
@@ -1610,13 +1609,13 @@ function saveText() {
    } else if (document.getElementById('persPopover').classList.contains('active') && currentEditingCell) {
         recordUndoState(); 
         const inputs = Array.from(document.querySelectorAll('#persInputList .pers-input-row input')).map(i => i.value.trim()).filter(v => v);
-        currentEditingCell.dataset.val = inputs.join('\n'); let displayHtml = inputs.map(v => { let textVal = v.replace(/"/g, '&quot;'); return `<div class="multi-val-row" style="justify-content: center;"><span class="badge" style="background:white; color:var(--c-texPri); border:1px solid #d1d1d1; padding:2px 8px; font-size:12px; height:auto; min-height:22px; line-height:1.2; text-transform:none; font-weight:500; display:inline-block; max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:center;" title="${textVal}">${textVal}</span></div>`; }).join('');
-        currentEditingCell.innerHTML = `<div class="clamp-wrapper" style="width:100%; text-align:center;">${displayHtml}</div>`; changed = true;
+        currentEditingCell.dataset.val = inputs.join('\n'); let displayHtml = inputs.map(v => { let textVal = v.replace(/"/g, '&quot;'); return `<div class="multi-val-row multi-val-center"><span class="badge badge-inline" title="${textVal}">${textVal}</span></div>`; }).join('');
+        currentEditingCell.innerHTML = `<div class="clamp-wrapper clamp-text-center">${displayHtml}</div>`; changed = true;
     } else if (document.getElementById('hwPersPopover').classList.contains('active') && currentEditingCell) {
         recordUndoState(); let tabRow = document.getElementById('hwRowTab'); let tabInp = document.getElementById('hwInpTab'); let vanRow = document.getElementById('hwRowVan'); let vanInp = document.getElementById('hwInpVan');
         let lines = []; if (tabRow && tabInp) lines.push(`Табличка: ${tabInp.value.trim() || 'є'}`); if (vanRow && vanInp) lines.push(`Вантажівка: ${vanInp.value.trim() || 'є'}`);
-        let rawVal = lines.join('\n'); let displayHtml = lines.map(l => { let parts = l.split(': '); let title = parts[0]; let textVal = parts[1] === 'є' ? 'Без тексту' : parts[1].replace(/"/g, '&quot;'); return `<div style="display:flex; flex-direction:column; margin-bottom:6px; align-items:center;"><div style="font-size:11px; color:var(--c-texSec); margin-bottom:2px; line-height:1; font-weight:400;">${title}</div><span class="badge" style="background:white; color:var(--c-texPri); border:1px solid #d1d1d1; padding:2px 8px; font-size:12px; height:auto; min-height:24px; text-transform:none; font-weight:500; display:inline-block; max-width:100%; white-space:normal !important; line-height:1.2; text-align:center;">${textVal}</span></div>`; }).join('');
-        currentEditingCell.dataset.val = rawVal; currentEditingCell.innerHTML = `<div class="clamp-wrapper" style="width:100%; display:flex; flex-direction:column; align-items:center;">${displayHtml}</div>`; changed = true;
+        let rawVal = lines.join('\n'); let displayHtml = lines.map(l => { let parts = l.split(': '); let title = parts[0]; let textVal = parts[1] === 'є' ? 'Без тексту' : parts[1].replace(/"/g, '&quot;'); return `<div class="pers-label"><div class="pers-label-title">${title}</div><span class="badge badge-multiline">${textVal}</span></div>`; }).join('');
+        currentEditingCell.dataset.val = rawVal; currentEditingCell.innerHTML = `<div class="clamp-wrapper clamp-col-center">${displayHtml}</div>`; changed = true;
     } else if (document.getElementById('wtPersPopover').classList.contains('active') && currentEditingCell) {
         recordUndoState();
         const para  = document.getElementById('wtInpPara')  ? document.getElementById('wtInpPara').value.trim()  : '';
@@ -1708,7 +1707,7 @@ window.openOrderDetailsModal = function(row) {
     let history = [];
     try { history = JSON.parse(row.dataset.history || '[]'); } catch(e) {}
     if (history.length === 0) {
-        content.innerHTML = '<div style="text-align:center; padding: 20px; color: var(--c-texSec);">Історія статусів порожня.<br>Вона почне записуватись для всіх нових замовлень.</div>';
+        content.innerHTML = '<div class="placeholder-center">Історія статусів порожня.<br>Вона почне записуватись для всіх нових замовлень.</div>';
     } else {
         let html = '';
         for (let i = 0; i < history.length; i++) {
@@ -1718,26 +1717,26 @@ window.openOrderDetailsModal = function(row) {
             let badgeStyle = stItem && stItem.customStyle ? stItem.customStyle : 'background: white; border: 1px solid var(--ca-borSecTra); color: var(--c-texPri);';
             let badgeClass = stItem && stItem.class ? stItem.class : 'badge-status';
             let actionText = (i === 0 || step.isCreation) ? "Створено в таблиці:" : "Змінено на:";
-            html += `<div style="margin-bottom: 8px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px;">
-                        <strong style="font-size: 13px; color: var(--c-texPri);">${dateStr}</strong>
-                        <span style="font-size: 12px; color: var(--c-texSec);">${actionText}</span>
-                        <span class="badge ${badgeClass}" style="${badgeStyle} padding: 2px 8px; height: auto; min-height: 20px;">${step.s}</span>
+            html += `<div class="history-entry">
+                        <strong class="history-date">${dateStr}</strong>
+                        <span class="history-action">${actionText}</span>
+                        <span class="badge badge-history ${badgeClass}" style="${badgeStyle}">${step.s}</span>
                      </div>`;
             if (i < history.length - 1) {
                 const diffMs = history[i+1].t - step.t;
-                html += `<div style="font-size: 11px; color: var(--c-texTer); margin-left: 12px; border-left: 1px dashed var(--ca-borSecTra); padding: 6px 0 6px 14px; margin-bottom: 8px;">
+                html += `<div class="history-detail">
                             ⏱ В цьому статусі замовлення було: <b>${formatTimeDiff(diffMs)}</b>
                          </div>`;
             } else {
                  const statusTextLower = step.s.toLowerCase();
                  if (statusTextLower === 'відправлено' || statusTextLower === 'done' || statusTextLower === 'зроблено') {
                      const totalDiff = step.t - history[0].t;
-                     html += `<div style="font-size: 11px; color: #4b9a52; margin-left: 12px; padding: 6px 0 0 14px; margin-bottom: 8px;">
+                     html += `<div class="history-detail--green">
                                 🎉 Загальний час виконання: <b>${formatTimeDiff(totalDiff)}</b>
                              </div>`;
                  } else {
                      const currentDiff = Date.now() - step.t;
-                     html += `<div style="font-size: 11px; color: #2383e2; margin-left: 12px; padding: 6px 0 0 14px; margin-bottom: 8px;">
+                     html += `<div class="history-detail--blue">
                                 ⏳ Поточний статус триває: <b>${formatTimeDiff(currentDiff)}</b>
                              </div>`;
                  }
@@ -2080,20 +2079,20 @@ function updateAllMaterialWarnings() {
 }
 function getIconStyleForMaterial(name) {
     const n = name.toLowerCase();
-    if (n.includes('фанера')) return { bg: '#fbf3db', color: '#8d6e63', svg: `<svg viewBox="0 0 24 24" style="width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round;"><path d="M2 11.5L12 6l10 5.5-10 5.5L2 11.5z"></path><path d="M2 16.5L12 22l10-5.5"></path></svg>` };
-    if (n.includes('акрил')) return { bg: '#d3e5ef', color: '#0288d1', svg: `<svg viewBox="0 0 24 24" style="width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round;"><path d="M2 11.5L12 6l10 5.5-10 5.5L2 11.5z"></path><path d="M2 16.5L12 22l10-5.5"></path></svg>` };
-    if (n.includes('картон') || n.includes('коробка')) return { bg: '#fdecc8', color: '#f57c00', svg: `<svg viewBox="0 0 24 24" style="width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><line x1="12" y1="22" x2="12" y2="12"></line></svg>` };
-    if (n.includes('скотч') || n.includes('стрічка')) return { bg: '#ffdad6', color: '#e53935', svg: `<svg viewBox="0 0 24 24" style="width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round;"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3"></circle><path d="M12 4v4"></path></svg>` };
-    if (n.includes('м\'яка') || n.includes('поролон')) return { bg: '#f4dfeb', color: '#8e24aa', svg: `<svg viewBox="0 0 24 24" style="width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round;"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><circle cx="8" cy="8" r="1" fill="currentColor"></circle><circle cx="15" cy="10" r="1" fill="currentColor"></circle><circle cx="10" cy="14" r="1" fill="currentColor"></circle><circle cx="16" cy="16" r="1" fill="currentColor"></circle></svg>` };
+    if (n.includes('фанера')) return { bg: '#fbf3db', color: '#8d6e63', svg: `<svg viewBox="0 0 24 24" class="mat-icon-svg"><path d="M2 11.5L12 6l10 5.5-10 5.5L2 11.5z"></path><path d="M2 16.5L12 22l10-5.5"></path></svg>` };
+    if (n.includes('акрил')) return { bg: '#d3e5ef', color: '#0288d1', svg: `<svg viewBox="0 0 24 24" class="mat-icon-svg"><path d="M2 11.5L12 6l10 5.5-10 5.5L2 11.5z"></path><path d="M2 16.5L12 22l10-5.5"></path></svg>` };
+    if (n.includes('картон') || n.includes('коробка')) return { bg: '#fdecc8', color: '#f57c00', svg: `<svg viewBox="0 0 24 24" class="mat-icon-svg"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><line x1="12" y1="22" x2="12" y2="12"></line></svg>` };
+    if (n.includes('скотч') || n.includes('стрічка')) return { bg: '#ffdad6', color: '#e53935', svg: `<svg viewBox="0 0 24 24" class="mat-icon-svg"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3"></circle><path d="M12 4v4"></path></svg>` };
+    if (n.includes('м\'яка') || n.includes('поролон')) return { bg: '#f4dfeb', color: '#8e24aa', svg: `<svg viewBox="0 0 24 24" class="mat-icon-svg"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><circle cx="8" cy="8" r="1" fill="currentColor"></circle><circle cx="15" cy="10" r="1" fill="currentColor"></circle><circle cx="10" cy="14" r="1" fill="currentColor"></circle><circle cx="16" cy="16" r="1" fill="currentColor"></circle></svg>` };
     
     // Новые иконки
-    if (n.includes('серветки')) return { bg: '#f1f5f9', color: '#64748b', svg: `<svg viewBox="0 0 24 24" style="width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round;"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><line x1="4" y1="12" x2="20" y2="12"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>` };
-    if (n.includes('клей')) return { bg: '#fef08a', color: '#ca8a04', svg: `<svg viewBox="0 0 24 24" style="width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round;"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>` };
-    if (n.includes('стрейч')) return { bg: '#e0e7ff', color: '#4f46e5', svg: `<svg viewBox="0 0 24 24" style="width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round;"><rect x="2" y="6" width="20" height="12" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6" y2="18"></line><line x1="18" y1="6" x2="18" y2="18"></line></svg>` };
+    if (n.includes('серветки')) return { bg: '#f1f5f9', color: '#64748b', svg: `<svg viewBox="0 0 24 24" class="mat-icon-svg"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><line x1="4" y1="12" x2="20" y2="12"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>` };
+    if (n.includes('клей')) return { bg: '#fef08a', color: '#ca8a04', svg: `<svg viewBox="0 0 24 24" class="mat-icon-svg"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>` };
+    if (n.includes('стрейч')) return { bg: '#e0e7ff', color: '#4f46e5', svg: `<svg viewBox="0 0 24 24" class="mat-icon-svg"><rect x="2" y="6" width="20" height="12" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6" y2="18"></line><line x1="18" y1="6" x2="18" y2="18"></line></svg>` };
     
     // --- ИКОНКА ДЛЯ НАЖДАЧКИ ---
-    if (n.includes('наждачка')) return { bg: '#f3f4f6', color: '#475569', svg: `<svg viewBox="0 0 24 24" style="width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round;"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><path d="M9 9h.01M15 9h.01M12 12h.01M9 15h.01M15 15h.01" stroke-width="2.5" stroke-linecap="round"></path></svg>` };
-    return { bg: '#dbeede', color: '#2e7d32', svg: `<svg viewBox="0 0 24 24" style="width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round;"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>` };
+    if (n.includes('наждачка')) return { bg: '#f3f4f6', color: '#475569', svg: `<svg viewBox="0 0 24 24" class="mat-icon-svg"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><path d="M9 9h.01M15 9h.01M12 12h.01M9 15h.01M15 15h.01" stroke-width="2.5" stroke-linecap="round"></path></svg>` };
+    return { bg: '#dbeede', color: '#2e7d32', svg: `<svg viewBox="0 0 24 24" class="mat-icon-svg"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>` };
 }
 function getColorShades(hex) {
     if (!hex || hex === '#ffffff') return { circleBg: '#ffffff', pillBg: '#f9f9fb', border: '#e5e7eb', text: '#374151', valColor: '#111827' };
@@ -2137,49 +2136,8 @@ function renderMaterialsTable() {
         }
     });
     let html = `
-    <style>
-        #materialsDashboard * { font-family: 'Inter', sans-serif !important; }
-        .figma-section-title { font-size: 16px; font-weight: 600; color: var(--c-texSec); margin: 0; padding-left: 4px; }
-        .figma-paint-grid, .figma-mats-grid { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 56px; }
-        @keyframes popIn { 0% { transform: translateY(15px) scale(0.98); opacity: 0; } 100% { transform: translateY(0) scale(1); opacity: 1; } }
-        .f-paint-card { display: flex; align-items: center; justify-content: space-between; border: 1px solid; border-radius: 28px; padding: 8px 18px 8px 8px; gap: 16px; cursor: grab; transition: transform 0.2s ease, box-shadow 0.2s ease; height: 72px; box-sizing: border-box; width: auto; min-width: 145px; opacity: 0; animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; position: relative; }
-        .f-paint-card:active { cursor: grabbing; }
-        .f-paint-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
-        .f-paint-card.is-empty { opacity: 1; filter: grayscale(0.5); border-style: dashed !important; }
-        
-        /* ФІКС: Повернуто тонку, м'яку обводку 1px rgba(255,255,255,0.2) */
-        .f-paint-circle { width: 54px; height: 54px; min-width: 54px; min-height: 54px; flex-shrink: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 800; text-align: center; line-height: 1.15; padding: 6px; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
-        .f-paint-circle-inner { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; width: 100%; word-wrap: break-word; }
-        
-        .f-paint-val { display:flex; align-items:center; justify-content: flex-end; gap: 8px; flex: 1;}
-        .f-paint-val .val-text { font-size: 22px; font-weight: 700; display:flex; align-items:baseline; gap:4px; line-height:1; letter-spacing: -1px; opacity: 0.85; margin-bottom: -2px;}
-        .f-paint-val span { font-size: 14px; font-weight: 600; opacity: 0.7; letter-spacing: normal; }
-        .f-mat-card { background: white; border: 1px solid var(--ca-borSecTra); border-radius: 28px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); display: flex; flex-direction: column; cursor: grab; transition: transform 0.2s ease, box-shadow 0.2s ease; opacity: 0; animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; min-width: 210px; flex: 1; max-width: 260px; position: relative; }
-        .f-mat-card:active { cursor: grabbing; }
-        .f-mat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.05); border-color: #d1d1d1; }
-        .f-mat-card.is-empty { opacity: 0.5; filter: grayscale(0.5); border-style: dashed; }
-        .f-mat-icon { width: 44px; height: 44px; border-radius: 50%; display:flex; align-items:center; justify-content:center; margin-bottom: 24px;}
-        .f-mat-title { font-size: 14px; color: var(--c-texSec); margin-bottom: 12px; font-weight: 500; }
-        
-        .f-mat-val { display:flex; align-items:center; gap:12px; margin-top: auto;}
-        .f-mat-val .val-text { font-size: 40px; font-weight: 800; color: #111827; display:flex; align-items:baseline; gap:6px; line-height: 1; letter-spacing: -1.5px;}
-        .f-mat-val span { font-size: 16px; font-weight: 600; color: #9ca3af; letter-spacing: normal;}
-        .f-add-inline { display: flex; align-items: center; justify-content: center; border: 2px dashed #e5e7eb !important; background: transparent !important; border-radius: 28px; cursor: pointer; transition: all 0.2s ease; box-shadow: none !important; opacity: 1; animation: none; color: #9ca3af; }
-        .f-add-inline:hover { border-color: #111827 !important; background: rgba(17, 24, 39, 0.02) !important; color: #111827; }
-        .f-add-mat { min-width: 210px; flex: 1; max-width: 260px; min-height: 160px; }
-        .sortable-ghost { opacity: 0.3; background: #f9f9fb; border-style: dashed; }
-        .sortable-drag { cursor: grabbing !important; }
-        .f-mat-actions { position: absolute; top: 16px; right: 16px; display: flex; gap: 6px; opacity: 0; transform: translateY(-4px); transition: all 0.2s ease; z-index: 10; }
-        .f-mat-card:hover .f-mat-actions { opacity: 1; transform: translateY(0); }
-        .f-mat-action-btn { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #9ca3af; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-        .f-mat-action-btn:hover { background: #f9f9fb; color: #111827; border-color: #d1d5db; transform: translateY(-1px); }
-        .f-mat-action-btn.delete-btn:hover { color: #ef4444; background: #fef2f2; border-color: #fca5a5; }
-        .quick-add-btn { background: rgba(17, 24, 39, 0.04); border: 1px solid rgba(17, 24, 39, 0.08); border-radius: 8px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #6B7280; transition: all 0.2s ease; opacity: 0; transform: scale(0.9); flex-shrink: 0; margin-left: auto; }
-        .f-paint-card:hover .quick-add-btn, .f-mat-card:hover .quick-add-btn { opacity: 1; transform: scale(1); }
-        .quick-add-btn:hover { background: #111827; color: white; border-color: #111827; }
-    </style>
-    <div style="padding: 10px 0 20px 0;">
-        <div class="figma-section-title" style="margin-bottom: 24px;">Фарба</div>
+    <div class="mat-dash-wrap">
+        <div class="figma-section-title figma-section-title--mb">Фарба</div>
         <div class="figma-paint-grid" id="paintGrid">
 `;
     let delay = 0; 
@@ -2199,7 +2157,7 @@ function renderMaterialsTable() {
                 </div>
                 <div class="f-paint-val" style="color: ${shades.valColor};">
                     <div class="val-text">${liters}<span>л</span></div>
-                    ${(isEmpty || isLow) ? `<span title="${isEmpty ? 'Немає фарби' : 'Мало фарби (мін: ' + (mat.threshold/1000).toFixed(1) + ' л)'}" style="font-size:14px;opacity:0.9;margin-right:2px;">⚠️</span>` : ''}
+                    ${(isEmpty || isLow) ? `<span title="${isEmpty ? 'Немає фарби' : 'Мало фарби (мін: ' + (mat.threshold/1000).toFixed(1) + ' л)'}" class="mat-warn-icon">⚠️</span>` : ''}
                     <button class="quick-add-btn ignore-drag" onclick="openQuickAdd(event, '${mat.id}', '${mat.name.replace(/'/g, "\\'")}', true)" title="Додати кількість">
                         <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     </button>
@@ -2212,7 +2170,7 @@ function renderMaterialsTable() {
             <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
         </div>
     
-    <div class="figma-section-title" style="margin-bottom: 24px;">Основні матеріали</div>
+    <div class="figma-section-title figma-section-title--mb">Основні матеріали</div>
     <div class="figma-mats-grid" id="basicGrid">`;
     displayBasics.forEach(mat => {
         const isEmpty = mat.qty <= 0;
@@ -2231,7 +2189,7 @@ function renderMaterialsTable() {
                         <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                     </button>
                 </div>
-                <div style="flex-grow: 1; cursor: pointer; display: flex; flex-direction: column;" onclick="openEditModal('${mat.name.replace(/'/g, "\\'")}', '${mat.unit}', false, '${mat.id}')">
+                <div class="f-mat-card-body" onclick="openEditModal('${mat.name.replace(/'/g, "\\'")}', '${mat.unit}', false, '${mat.id}')">
                     <div class="f-mat-icon" style="background:${style.bg}; color:${style.color};">${style.svg}</div>
                     <div class="f-mat-title">${mat.name}${(isEmpty || isLow) ? ' ⚠️' : ''}</div>
                     <div class="f-mat-val">
@@ -2358,14 +2316,14 @@ window.renderRulesList = function() {
     if (!container) return;
     const matName = document.getElementById('matName')?.value?.trim();
     if (!matName) {
-        container.innerHTML = '<div style="text-align:center;padding:16px;color:#9ca3af;font-size:13px;">Збережіть матеріал, щоб побачити рецепти</div>';
+        container.innerHTML = '<div class="placeholder-inline">Збережіть матеріал, щоб побачити рецепти</div>';
         return;
     }
     // Збираємо всі правила де цей матеріал використовується
     const found = materialsData.find(m => m.name === matName);
     const rules = (found && found.rules) ? found.rules.filter(r => (parseFloat(r.amount) || 0) > 0) : [];
     if (rules.length === 0) {
-        container.innerHTML = '<div style="text-align:center;padding:16px;color:#9ca3af;font-size:13px;border:1px dashed #e5e7eb;border-radius:12px;">Цей матеріал ще не доданий до жодного рецепту товару</div>';
+        container.innerHTML = '<div class="placeholder-dashed">Цей матеріал ще не доданий до жодного рецепту товару</div>';
         return;
     }
     // Групуємо по товар+розмір+колір
@@ -2382,19 +2340,19 @@ window.renderRulesList = function() {
     [...(window.kopilkaColors||[]), ...(window.hwColors||[])].forEach(c => allColorsMap[c.name] = c.hex);
     let html = '';
     Object.values(groups).forEach(g => {
-        const sizeBadge = g.size !== 'all' ? `<span style="background:#f3f4f6;border:1px solid #e5e7eb;color:#374151;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;margin-left:6px;">${g.size}</span>` : '';
+        const sizeBadge = g.size !== 'all' ? `<span class="mat-recipe-badge">${g.size}</span>` : '';
         let colorBadge = '';
         if (g.color !== 'all' && allColorsMap[g.color]) {
-            colorBadge = `<span style="background:white;border:1px solid #d1d1d1;color:#374151;font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px;margin-left:6px;display:inline-flex;align-items:center;gap:4px;"><span style="width:9px;height:9px;border-radius:50%;background:${allColorsMap[g.color]};border:1px solid rgba(0,0,0,0.1);display:inline-block;"></span>${g.color}</span>`;
+            colorBadge = `<span class="mat-recipe-color-badge"><span class="color-dot--sm" style="background:${allColorsMap[g.color]};"></span>${g.color}</span>`;
         }
         const prodLabel = g.prod === 'all' ? 'Будь-який товар' : g.prod;
         const unit = found?.unit || '';
-        html += `<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border:1px solid #f3f4f6;border-radius:12px;margin-bottom:8px;background:#fafafa;">
-            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:2px;">
-                <span style="font-size:13px;font-weight:700;color:#111827;">${prodLabel}</span>
+        html += `<div class="mat-recipe-row">
+            <div class="mat-recipe-info">
+                <span class="mat-recipe-prod">${prodLabel}</span>
                 ${sizeBadge}${colorBadge}
             </div>
-            <span style="font-size:13px;font-weight:800;color:#374151;white-space:nowrap;margin-left:12px;">${g.amount % 1 === 0 ? g.amount : g.amount.toFixed(2)} ${unit}</span>
+            <span class="mat-recipe-amount">${g.amount % 1 === 0 ? g.amount : g.amount.toFixed(2)} ${unit}</span>
         </div>`;
     });
     container.innerHTML = html;
@@ -2518,7 +2476,7 @@ window.openChatPopover = function(pin, clientX, clientY) {
         }
         renderThread(pin);
     } else { 
-        document.getElementById('chatMessages').innerHTML = '<div style="color:#9a9a97; font-size:13px; text-align:center; padding:10px;">Нове обговорення</div>'; 
+        document.getElementById('chatMessages').innerHTML = '<div class="placeholder-chat">Нове обговорення</div>'; 
     }
     setTimeout(() => document.getElementById('chatInput').focus(), 50);
 }
@@ -2564,7 +2522,7 @@ window.openOrderDetailsModal = function(row) {
     let history = [];
     try { history = JSON.parse(row.dataset.history || '[]'); } catch(e) {}
     if (history.length === 0) {
-        content.innerHTML = '<div style="text-align:center; padding: 20px; color: var(--c-texSec);">Історія статусів порожня.<br>Вона почне записуватись для всіх нових замовлень.</div>';
+        content.innerHTML = '<div class="placeholder-center">Історія статусів порожня.<br>Вона почне записуватись для всіх нових замовлень.</div>';
     } else {
         let html = '';
         for (let i = 0; i < history.length; i++) {
@@ -2574,26 +2532,26 @@ window.openOrderDetailsModal = function(row) {
             let badgeStyle = stItem && stItem.customStyle ? stItem.customStyle : 'background: white; border: 1px solid var(--ca-borSecTra); color: var(--c-texPri);';
             let badgeClass = stItem && stItem.class ? stItem.class : 'badge-status';
             let actionText = (i === 0 || step.isCreation) ? "Створено в таблиці:" : "Змінено на:";
-            html += `<div style="margin-bottom: 8px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px;">
-                        <strong style="font-size: 13px; color: var(--c-texPri);">${dateStr}</strong>
-                        <span style="font-size: 12px; color: var(--c-texSec);">${actionText}</span>
-                        <span class="badge ${badgeClass}" style="${badgeStyle} padding: 2px 8px; height: auto; min-height: 20px;">${step.s}</span>
+            html += `<div class="history-entry">
+                        <strong class="history-date">${dateStr}</strong>
+                        <span class="history-action">${actionText}</span>
+                        <span class="badge badge-history ${badgeClass}" style="${badgeStyle}">${step.s}</span>
                      </div>`;
             if (i < history.length - 1) {
                 const diffMs = history[i+1].t - step.t;
-                html += `<div style="font-size: 11px; color: var(--c-texTer); margin-left: 12px; border-left: 1px dashed var(--ca-borSecTra); padding: 6px 0 6px 14px; margin-bottom: 8px;">
+                html += `<div class="history-detail">
                             ⏱ В цьому статусі замовлення було: <b>${formatTimeDiff(diffMs)}</b>
                          </div>`;
             } else {
                  const statusTextLower = step.s.toLowerCase();
                  if (statusTextLower === 'відправлено' || statusTextLower === 'done' || statusTextLower === 'зроблено') {
                      const totalDiff = step.t - history[0].t;
-                     html += `<div style="font-size: 11px; color: #4b9a52; margin-left: 12px; padding: 6px 0 0 14px; margin-bottom: 8px;">
+                     html += `<div class="history-detail--green">
                                 🎉 Загальний час виконання: <b>${formatTimeDiff(totalDiff)}</b>
                              </div>`;
                  } else {
                      const currentDiff = Date.now() - step.t;
-                     html += `<div style="font-size: 11px; color: #2383e2; margin-left: 12px; padding: 6px 0 0 14px; margin-bottom: 8px;">
+                     html += `<div class="history-detail--blue">
                                 ⏳ Поточний статус триває: <b>${formatTimeDiff(currentDiff)}</b>
                              </div>`;
                  }
@@ -2616,9 +2574,9 @@ window.renderRecipientCell = function(cell, val) {
     const lines = val.split('\n').filter(Boolean);
     const name = lines[0] || '';
     const rest = lines.slice(1).join(' · ');
-    cell.innerHTML = `<div class="clamp-wrapper recipient-preview" style="cursor:pointer;">
-        <div style="font-weight:600;color:#111827;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${name}</div>
-        ${rest ? `<div style="font-size:10px;color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;">${rest}</div>` : ''}
+    cell.innerHTML = `<div class="clamp-wrapper recipient-preview">
+        <div class="recipient-name">${name}</div>
+        ${rest ? `<div class="recipient-rest">${rest}</div>` : ''}
     </div>`;
 };
 // Ініціалізуємо recipient клітинки при завантаженні даних
@@ -2796,15 +2754,15 @@ window.deleteMaterialQuick = function(e, id) {
 if (!document.getElementById('quickAddModal')) {
     const qaModalHtml = `
     <div id="quickAddModal" class="modal-overlay no-print" onclick="closeQuickAdd()">
-        <div class="mac-modal" style="width: 320px; padding: 24px; text-align: center; border-radius: 24px; background: #fff;" onclick="event.stopPropagation()">
-            <h3 style="margin: 0 0 8px 0; font-size: 18px; color: #111827;">Поповнення запасів</h3>
-            <p id="qaMatName" style="font-size: 13px; color: #6B7280; margin: 0 0 20px 0;">Матеріал</p>
+        <div class="mac-modal qa-modal" onclick="event.stopPropagation()">
+            <h3 class="qa-title">Поповнення запасів</h3>
+            <p id="qaMatName" class="qa-subtitle">Матеріал</p>
             <input type="hidden" id="qaMatId">
             <input type="hidden" id="qaIsColor">
             
-            <input type="number" id="qaAmount" class="mac-input" placeholder="+ Введіть кількість" style="text-align: center; font-size: 18px; font-weight: 600; padding: 16px; width: 100%; box-sizing: border-box; background: #f9f9fb; border: 1px solid #e5e7eb; border-radius: 12px; margin-bottom: 20px; outline: none;" onkeydown="if(event.key==='Enter') saveQuickAdd()">
+            <input type="number" id="qaAmount" class="mac-input qa-input" placeholder="+ Введіть кількість" onkeydown="if(event.key==='Enter') saveQuickAdd()">
             
-            <div style="display: flex; gap: 10px; justify-content: center;">
+            <div class="qa-btns">
                 <button class="qa-btn-cancel" onclick="closeQuickAdd()">Скасувати</button>
                 <button class="qa-btn-save" onclick="saveQuickAdd()">Додати</button>
             </div>
@@ -2894,50 +2852,50 @@ if (!document.getElementById('productRecipeModal')) {
             .detail-back { display:inline-flex; align-items:center; gap:6px; color:#9ca3af; font-size:13px; font-weight:600; cursor:pointer; background:none; border:none; padding:0; transition:0.15s; }
             .detail-back:hover { color:#111827; }
         </style>
-        <div class="mac-modal" style="width:860px; max-width:95vw; padding:32px; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
+        <div class="mac-modal recipe-modal" onclick="event.stopPropagation()">
             <div id="recipeMainView">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+                <div class="recipe-modal-header">
                     <div>
-                        <h3 id="recipeModalTitle" style="margin:0 0 3px 0; font-size:20px; color:#111827; font-weight:800;"></h3>
-                        <p style="font-size:12px; color:#9ca3af; margin:0;">Натисни на картку щоб редагувати рецепт і ціну</p>
+                        <h3 id="recipeModalTitle" class="recipe-modal-title"></h3>
+                        <p class="recipe-modal-hint">Натисни на картку щоб редагувати рецепт і ціну</p>
                     </div>
                     <button class="mac-btn-secondary" onclick="closeProductRecipeModal()">Закрити</button>
                 </div>
                 <div id="recipeCardsContainer"></div>
             </div>
-            <div id="recipeDetailView" style="display:none;">
-                <div style="height:1px; background:#f3f4f6; margin:28px 0 24px;"></div>
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
-                    <h3 id="detailTitle" style="margin:0; font-size:18px; font-weight:800; color:#111827; display:flex; align-items:center; gap:8px;"></h3>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <div id="detailCostBadge" style="font-size:12px; color:#374151; font-weight:600; background:#f3f4f6; border:1px solid #e5e7eb; padding:3px 12px; border-radius:8px;"></div>
-                        <button class="detail-back" onclick="window.showRecipeMainView()" style="color:#9ca3af; font-size:12px;">
+            <div id="recipeDetailView" class="is-hidden">
+                <div class="recipe-detail-divider"></div>
+                <div class="recipe-detail-header">
+                    <h3 id="detailTitle" class="recipe-detail-title"></h3>
+                    <div class="recipe-detail-actions">
+                        <div id="detailCostBadge" class="recipe-cost-badge"></div>
+                        <button class="detail-back recipe-detail-back" onclick="window.showRecipeMainView()">
                             <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M18 6L6 18M6 6l12 12"/></svg>
                             Закрити
                         </button>
                     </div>
                 </div>
-                <div class="recipe-price-grid" style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:10px; margin-bottom:10px;">
-                    <div style="background:#f9f9fb; border-radius:12px; padding:14px 16px; border:1px solid #e5e7eb;">
-                        <div style="font-size:10px; color:#9ca3af; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">Ціна продажу</div>
-                        <input type="number" id="detailPriceInput" placeholder="—" readonly style="width:100%; padding:0; border:none; font-size:18px; font-weight:800; color:#111827; outline:none; background:transparent; box-sizing:border-box; cursor:default;">
+                <div class="recipe-price-grid">
+                    <div class="recipe-price-cell">
+                        <div class="recipe-price-label">Ціна продажу</div>
+                        <input type="number" id="detailPriceInput" placeholder="—" readonly class="recipe-price-input">
                     </div>
-                    <div style="background:#f9f9fb; border-radius:12px; padding:14px 16px; border:1px solid #e5e7eb;">
-                        <div style="font-size:10px; color:#9ca3af; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">Доставка</div>
-                        <input type="number" id="detailDeliveryInput" placeholder="—" readonly style="width:100%; padding:0; border:none; font-size:18px; font-weight:800; color:#111827; outline:none; background:transparent; box-sizing:border-box; cursor:default;">
+                    <div class="recipe-price-cell">
+                        <div class="recipe-price-label">Доставка</div>
+                        <input type="number" id="detailDeliveryInput" placeholder="—" readonly class="recipe-price-input">
                     </div>
-                    <div style="background:#f9f9fb; border-radius:12px; padding:14px 16px; border:1px solid #e5e7eb;">
-                        <div style="font-size:10px; color:#9ca3af; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">Прибуток</div>
-                        <div id="detailProfitDisplay" style="font-size:18px; font-weight:800; color:#374151;">—</div>
+                    <div class="recipe-price-cell">
+                        <div class="recipe-price-label">Прибуток</div>
+                        <div id="detailProfitDisplay" class="recipe-price-value">—</div>
                     </div>
-                    <div style="background:#f9f9fb; border-radius:12px; padding:14px 16px; border:1px solid #e5e7eb;">
-                        <div style="font-size:10px; color:#9ca3af; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">Маржа</div>
-                        <div id="detailMarginDisplay" style="font-size:18px; font-weight:800; color:#374151;">—</div>
+                    <div class="recipe-price-cell">
+                        <div class="recipe-price-label">Маржа</div>
+                        <div id="detailMarginDisplay" class="recipe-price-value">—</div>
                     </div>
                 </div>
-                <div id="detailPriceCount" style="font-size:11px;color:#9ca3af;margin-bottom:18px;text-align:right;"></div>
-                <div id="recipeRulesContainer" style="background:#f9f9fb; border:1px solid #e5e7eb; border-radius:14px; padding:20px; min-height:140px; margin-bottom:18px;"></div>
-                <div style="display:flex; gap:10px; justify-content:flex-end;">
+                <div id="detailPriceCount" class="recipe-price-count"></div>
+                <div id="recipeRulesContainer" class="recipe-rules-box"></div>
+                <div class="recipe-actions-row">
                     <button class="mac-btn-secondary" onclick="window.showRecipeMainView()">Скасувати</button>
                     <button class="mac-btn-primary" onclick="saveProductRecipe()">Зберегти</button>
                 </div>
@@ -3004,14 +2962,14 @@ window.renderProductsDashboard = function() {
         (colorCell?.dataset.val || '').split(/\n|,/).map(s=>s.trim()).filter(Boolean).forEach(c => colorsByProduct[name].add(c));
     });
     if (!products.length) {
-        container.innerHTML = `<div style="text-align:center;padding:60px 20px;color:#9ca3af;">
-            <div style="font-size:40px;margin-bottom:12px;">📦</div>
-            <div style="font-size:14px;font-weight:600;">Товарів ще немає</div>
-            <div style="font-size:12px;margin-top:6px;">Додай товари в замовлення щоб вони з'явились тут</div>
+        container.innerHTML = `<div class="placeholder-empty placeholder-empty--lg">
+            <div class="placeholder-icon">📦</div>
+            <div class="placeholder-title">Товарів ще немає</div>
+            <div class="placeholder-sub--mt">Додай товари в замовлення щоб вони з'явились тут</div>
         </div>`;
         return;
     }
-    let html = `<div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px;">`;
+    let html = `<div class="prod-grid">`;
     products.forEach(prod => {
         const isHw = prod.toLowerCase().includes('хот') || prod.toLowerCase().includes('hot');
         const orders = ordersByProduct[prod] || 0;
@@ -3024,30 +2982,30 @@ window.renderProductsDashboard = function() {
         const sizes  = cfg && cfg.sizes  && cfg.sizes.length  ? cfg.sizes  : (usedSizes.length > 0 ? usedSizes : configSizes);
         const colors = cfg && cfg.colors && cfg.colors.length ? cfg.colors : (usedColorNames.size > 0 ? allColors.filter(c => usedColorNames.has(c.name)) : allColors);
         const dots = colors.slice(0, 7).map(c =>
-            `<span style="width:11px;height:11px;border-radius:50%;background:${c.hex};border:1px solid rgba(0,0,0,0.08);display:inline-block;flex-shrink:0;" title="${c.name}"></span>`
+            `<span class="color-dot--11" style="background:${c.hex};" title="${c.name}"></span>`
         ).join('');
         const moreDots = colors.length > 7
-            ? `<span style="font-size:10px;color:#9ca3af;font-weight:600;margin-left:2px;">+${colors.length - 7}</span>` : '';
+            ? `<span class="prod-dots-more">+${colors.length - 7}</span>` : '';
         const sizesHtml = sizes.map(s =>
-            `<span style="font-size:10px;font-weight:700;color:#6B7280;background:#f3f4f6;padding:2px 8px;border-radius:6px;">${s}</span>`
+            `<span class="badge-size-sm">${s}</span>`
         ).join('');
-        html += `<div style="position:relative;background:white;border:1.5px solid #f3f4f6;border-radius:16px;padding:20px;cursor:pointer;transition:all 0.18s;display:flex;flex-direction:column;gap:12px;"
+        html += `<div class="prod-card"
             
             onclick="window.openProductRecipeModal('${prod.replace(/'/g,"\\'")}')">
             <button class="prod-settings-btn" onclick="event.stopPropagation();window.openAddProductModal('${prod.replace(/'/g,"\\'")}');"
-                style="position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:8px;border:1.5px solid #e5e7eb;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:0.15s;padding:0;" title="Налаштування товару">
+                title="Налаштування товару">
                 <svg viewBox="0 0 24 24" width="14" height="14" stroke="#6B7280" stroke-width="2" fill="none"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
             </button>
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding-right:24px;">
-                <div style="font-size:14px;font-weight:800;color:#111827;line-height:1.3;">${prod}</div>
-                ${orders > 0 ? `<span style="flex-shrink:0;font-size:11px;font-weight:700;color:#6B7280;background:#f3f4f6;padding:2px 8px;border-radius:20px;">${orders} зам.</span>` : ''}
+            <div class="prod-card-header">
+                <div class="prod-card-name">${prod}</div>
+                ${orders > 0 ? `<span class="badge-size-pill">${orders} зам.</span>` : ''}
             </div>
-            ${sizesHtml ? `<div style="display:flex;gap:4px;flex-wrap:wrap;">${sizesHtml}</div>` : ''}
-            <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">${dots}${moreDots}</div>
+            ${sizesHtml ? `<div class="prod-card-sizes">${sizesHtml}</div>` : ''}
+            <div class="prod-card-dots">${dots}${moreDots}</div>
         </div>`;
     });
     html += `
-        <div onclick="window.openAddProductModal()" class="prod-add-card" style="background:transparent;border:1.5px dashed #e5e7eb;border-radius:16px;padding:20px;cursor:pointer;transition:all 0.18s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:100px;color:#9ca3af;">
+        <div onclick="window.openAddProductModal()" class="prod-add-card">
             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             <span >Новий товар</span>
         </div>
@@ -3233,18 +3191,18 @@ window.openAddColorModal = function() {
     modal.id = '_addColorModal';
     modal.className = 'color-modal-overlay';
     modal.innerHTML = `
-        <div style="background:white;border-radius:20px;padding:28px;width:380px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,0.15);" onclick="event.stopPropagation()">
-            <div style="font-size:16px;font-weight:800;color:#111827;margin-bottom:18px;">Новий колір фарби</div>
-            <div style="display:flex;gap:10px;margin-bottom:12px;">
-                <input id="_newColorName" type="text" placeholder="Назва кольору" style="flex:1;padding:12px 14px;border:1.5px solid #e5e7eb;border-radius:12px;font-size:14px;font-weight:600;outline:none;font-family:inherit;" onfocus="this.style.borderColor='#111827'" onblur="this.style.borderColor='#e5e7eb'">
-                <div style="position:relative;">
-                    <input id="_newColorHex" type="color" value="#aaaaaa" style="width:50px;height:48px;border-radius:12px;border:1.5px solid #e5e7eb;cursor:pointer;padding:4px;" title="Колір">
+        <div class="add-color-modal" onclick="event.stopPropagation()">
+            <div class="add-color-title">Новий колір фарби</div>
+            <div class="add-color-inputs">
+                <input id="_newColorName" type="text" placeholder="Назва кольору" class="add-color-name" onfocus="this.style.borderColor='#111827'" onblur="this.style.borderColor='#e5e7eb'">
+                <div class="add-color-picker-wrap">
+                    <input id="_newColorHex" type="color" value="#aaaaaa" class="add-color-picker" title="Колір">
                 </div>
             </div>
-            <div style="font-size:11px;color:#9ca3af;margin-bottom:18px;">Колір з'явиться в розділі Матеріали та в рецептах товарів</div>
-            <div style="display:flex;gap:10px;justify-content:flex-end;">
-                <button onclick="document.getElementById('_addColorModal').remove()" style="padding:10px 18px;border-radius:10px;border:1.5px solid #e5e7eb;background:white;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Скасувати</button>
-                <button onclick="window._saveNewColor()" style="padding:10px 20px;border-radius:10px;border:none;background:#111827;color:white;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">Додати</button>
+            <div class="add-color-hint">Колір з'явиться в розділі Матеріали та в рецептах товарів</div>
+            <div class="add-color-btns">
+                <button onclick="document.getElementById('_addColorModal').remove()" class="add-color-cancel">Скасувати</button>
+                <button onclick="window._saveNewColor()" class="add-color-submit">Додати</button>
             </div>
         </div>`;
     modal.addEventListener('click', () => modal.remove());
@@ -3385,21 +3343,13 @@ window.renderFinancesDashboard = function() {
     const periodBtns = ['week','month','all','custom'].map(p => {
         const labels = {week:'Тиждень', month:'Місяць', all:'Весь час', custom:'Дата'};
         const isActive = window._finPeriod === p;
-        return `<button onclick="window._finPeriod='${p}'; window.renderFinancesDashboard();" style="
-            padding:6px 14px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer;
-            border:1.5px solid ${isActive ? '#111827' : '#e5e7eb'};
-            background:${isActive ? '#111827' : 'white'};
-            color:${isActive ? 'white' : '#6B7280'};
-            transition:0.15s; font-family:inherit;
-        ">${labels[p]}</button>`;
+        return `<button onclick="window._finPeriod='${p}'; window.renderFinancesDashboard();" class="fin-period-btn ${isActive ? 'fin-period-btn--active' : 'fin-period-btn--inactive'}">${labels[p]}</button>`;
     }).join('');
     const customDateHtml = window._finPeriod === 'custom' ? `
-        <div style="display:flex;align-items:center;gap:8px;margin-top:12px;">
-            <input type="date" value="${window._finFrom}" onchange="window._finFrom=this.value; window.renderFinancesDashboard();"
-                style="padding:6px 10px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;font-family:inherit;outline:none;color:#111827;">
-            <span style="color:#9ca3af;font-size:13px;">—</span>
-            <input type="date" value="${window._finTo}" onchange="window._finTo=this.value; window.renderFinancesDashboard();"
-                style="padding:6px 10px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;font-family:inherit;outline:none;color:#111827;">
+        <div class="fin-date-row">
+            <input type="date" value="${window._finFrom}" onchange="window._finFrom=this.value; window.renderFinancesDashboard();" class="fin-date-input">
+            <span class="fin-date-sep">—</span>
+            <input type="date" value="${window._finTo}" onchange="window._finTo=this.value; window.renderFinancesDashboard();" class="fin-date-input">
         </div>` : '';
     const summaryCards = [
         { label: 'Дохід',        value: totalRevenue.toFixed(0)  + ' ₴', color: '#111827', bg: '#f9f9fb' },
@@ -3409,9 +3359,9 @@ window.renderFinancesDashboard = function() {
         { label: 'Прибуток',     value: totalProfit.toFixed(0)   + ' ₴', color: totalProfit >= 0 ? '#15803d' : '#dc2626', bg: totalProfit >= 0 ? '#f0fdf4' : '#fef2f2' },
         { label: 'Маржа',        value: margin + ' %',                    color: totalProfit >= 0 ? '#15803d' : '#dc2626', bg: totalProfit >= 0 ? '#f0fdf4' : '#fef2f2' },
     ].map(c => `
-        <div style="background:${c.bg};border:1.5px solid #f3f4f6;border-radius:14px;padding:16px 20px;">
-            <div style="font-size:11px;color:#9ca3af;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">${c.label}</div>
-            <div style="font-size:22px;font-weight:800;color:${c.color};">${c.value}</div>
+        <div class="fin-summary-card" style="background:${c.bg};">
+            <div class="fin-summary-label">${c.label}</div>
+            <div class="fin-summary-value" style="color:${c.color};">${c.value}</div>
         </div>`).join('');
     // Список рядків з розкладкою матеріалів
     if (!window._finExpanded) window._finExpanded = {};
@@ -3440,65 +3390,64 @@ window.renderFinancesDashboard = function() {
         return items.sort((a,b) => b.subtotal - a.subtotal);
     };
     const listHtml = filtered.length === 0
-        ? `<div style="text-align:center;padding:40px;color:#9ca3af;font-size:14px;">Немає даних за цей період</div>`
+        ? `<div class="fin-empty">Немає даних за цей період</div>`
         : filtered.map((r, idx) => {
             const allColorsArr = [...(window.hwColors||[]), ...(window.kopilkaColors||[])];
             const colorObj = allColorsArr.find(c => c.name === r.color);
-            const dot = colorObj ? `<span style="width:9px;height:9px;border-radius:50%;background:${colorObj.hex};border:1px solid rgba(0,0,0,0.1);display:inline-block;flex-shrink:0;"></span>` : '';
+            const dot = colorObj ? `<span class="color-dot--sm" style="background:${colorObj.hex};"></span>` : '';
             const profitColor = r.profit > 0 ? '#15803d' : r.profit < 0 ? '#dc2626' : '#9ca3af';
             const expKey = `${idx}_${r.prod}_${r.size}_${r.color}`;
             const isExpanded = !!window._finExpanded[expKey];
             const breakdown = isExpanded ? getCostBreakdown(r.prod, r.size, r.color) : [];
             const breakdownHtml = isExpanded ? `
-                <div style="background:#f9f9fb;border-top:1px solid #f3f4f6;padding:10px 16px 10px 64px;">
+                <div class="fin-row-detail">
                     ${breakdown.length === 0 && r.delivery === 0
-                        ? `<div style="font-size:11px;color:#9ca3af;font-style:italic;">Рецепт не налаштовано</div>`
+                        ? `<div class="fin-no-recipe">Рецепт не налаштовано</div>`
                         : [
                             ...breakdown.map(item => {
                                 const circleDot = item.isColor
-                                    ? `<span style="width:8px;height:8px;border-radius:50%;background:${item.hex};border:1px solid rgba(0,0,0,0.12);display:inline-block;flex-shrink:0;margin-right:4px;"></span>`
+                                    ? `<span class="color-dot--xs" style="background:${item.hex};"></span>`
                                     : '';
-                                return `<div style="display:flex;align-items:center;justify-content:space-between;padding:3px 0;border-bottom:1px solid #f3f4f6;">
-                                    <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:#6B7280;">${circleDot}${item.name}</div>
-                                    <div style="display:flex;align-items:center;gap:16px;">
-                                        <span style="font-size:11px;color:#9ca3af;">${item.amount % 1 === 0 ? item.amount : item.amount.toFixed(2)} ${item.unit} × ${item.price} ₴</span>
-                                        <span style="font-size:11px;font-weight:700;color:#374151;min-width:50px;text-align:right;">${item.subtotal.toFixed(2)} ₴</span>
+                                return `<div class="fin-recipe-row">
+                                    <div class="fin-recipe-name">${circleDot}${item.name}</div>
+                                    <div class="fin-recipe-calc">
+                                        <span class="fin-recipe-amount">${item.amount % 1 === 0 ? item.amount : item.amount.toFixed(2)} ${item.unit} × ${item.price} ₴</span>
+                                        <span class="fin-recipe-subtotal">${item.subtotal.toFixed(2)} ₴</span>
                                     </div>
                                 </div>`;
                             }),
-                            r.delivery > 0 ? `<div style="display:flex;align-items:center;justify-content:space-between;padding:3px 0;border-bottom:1px solid #f3f4f6;">
-                                <div style="font-size:11px;color:#6B7280;">🚚 Доставка</div>
-                                <span style="font-size:11px;font-weight:700;color:#374151;min-width:50px;text-align:right;">${r.delivery.toFixed(0)} ₴</span>
+                            r.delivery > 0 ? `<div class="fin-delivery-row">
+                                <div class="fin-delivery-label">🚚 Доставка</div>
+                                <span class="fin-recipe-subtotal">${r.delivery.toFixed(0)} ₴</span>
                             </div>` : ''
                           ].join('')
                     }
-                    ${(breakdown.length > 0 || r.delivery > 0) ? `<div style="display:flex;justify-content:flex-end;padding-top:6px;font-size:12px;font-weight:800;color:#111827;">Разом: ${(r.cost + r.delivery).toFixed(0)} ₴</div>` : ''}
+                    ${(breakdown.length > 0 || r.delivery > 0) ? `<div class="fin-total-row">Разом: ${(r.cost + r.delivery).toFixed(0)} ₴</div>` : ''}
                 </div>` : '';
-            return `<div style="border-bottom:1px solid #f9f9fb;">
-                <div style="display:flex;align-items:center;padding:12px 16px;gap:12px;cursor:pointer;transition:background 0.1s;"
-                    onclick="window._finExpanded['${expKey}']=!window._finExpanded['${expKey}'];window.renderFinancesDashboard();"
-                    class="fin-row-hover"">
-                    <div style="font-size:11px;color:#9ca3af;font-weight:500;min-width:36px;">${r.dateStr || '—'}</div>
-                    <div style="flex:1;min-width:0;">
-                        <div style="font-size:13px;font-weight:700;color:#111827;">${r.prod}</div>
-                        <div style="display:flex;align-items:center;gap:5px;margin-top:3px;">
-                            ${r.size !== 'all' ? `<span style="font-size:11px;font-weight:700;color:#6B7280;background:#f3f4f6;padding:1px 6px;border-radius:4px;">${r.size}</span>` : ''}
-                            ${dot}<span style="font-size:11px;color:#9ca3af;">${r.color !== 'all' ? r.color : ''}</span>
+            return `<div class="fin-row">
+                <div class="fin-row-header"
+                    onclick="window._finExpanded['${expKey}']=!window._finExpanded['${expKey}'];window.renderFinancesDashboard();">
+                    <div class="fin-row-date">${r.dateStr || '—'}</div>
+                    <div class="fin-row-info">
+                        <div class="fin-row-prod">${r.prod}</div>
+                        <div class="fin-row-tags">
+                            ${r.size !== 'all' ? `<span class="badge-size-sm badge-size-sm--fin">${r.size}</span>` : ''}
+                            ${dot}<span class="fin-stat-label">${r.color !== 'all' ? r.color : ''}</span>
                         </div>
                     </div>
-                    <div style="text-align:right;min-width:70px;">
-                        <div style="font-size:11px;color:#9ca3af;">Собів.</div>
-                        <div style="font-size:12px;font-weight:600;color:#374151;">${(r.cost + r.delivery) > 0 ? (r.cost + r.delivery).toFixed(0)+' ₴' : '—'}</div>
+                    <div class="fin-row-stat">
+                        <div class="fin-stat-label">Собів.</div>
+                        <div class="fin-stat-val">${(r.cost + r.delivery) > 0 ? (r.cost + r.delivery).toFixed(0)+' ₴' : '—'}</div>
                     </div>
-                    <div style="text-align:right;min-width:70px;">
-                        <div style="font-size:11px;color:#9ca3af;">Ціна</div>
-                        <div style="font-size:12px;font-weight:600;color:#111827;">${r.price > 0 ? r.price.toFixed(0)+' ₴' : '—'}</div>
+                    <div class="fin-row-stat">
+                        <div class="fin-stat-label">Ціна</div>
+                        <div class="fin-stat-val--dark">${r.price > 0 ? r.price.toFixed(0)+' ₴' : '—'}</div>
                     </div>
-                    <div style="text-align:right;min-width:80px;">
-                        <div style="font-size:11px;color:#9ca3af;">Прибуток</div>
-                        <div style="font-size:14px;font-weight:800;color:${profitColor};">${r.price > 0 ? (r.profit >= 0 ? '+' : '') + r.profit.toFixed(0)+' ₴' : '—'}</div>
+                    <div class="fin-row-stat--wide">
+                        <div class="fin-stat-label">Прибуток</div>
+                        <div class="fin-stat-val--profit" style="color:${profitColor};">${r.price > 0 ? (r.profit >= 0 ? '+' : '') + r.profit.toFixed(0)+' ₴' : '—'}</div>
                     </div>
-                    <div style="margin-left:4px;color:#9ca3af;transition:transform 0.2s;transform:rotate(${isExpanded ? '180' : '0'}deg);">
+                    <div class="fin-row-chevron" style="transform:rotate(${isExpanded ? '180' : '0'}deg);">
                         <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </div>
                     ${r.orderId ? `<div onclick="event.stopPropagation();if(confirm('Прибрати цей запис з фінансів?')){const domRow=document.querySelector('tr[data-order-id=\\'${r.orderId}\\']');if(domRow)domRow.dataset.hiddenFromFinances='true';window.renderFinancesDashboard();db.collection('orders').doc('${r.orderId}').update({hiddenFromFinances:true})}" class="fin-delete-icon" title="Прибрати з фінансів">
@@ -3509,43 +3458,41 @@ window.renderFinancesDashboard = function() {
             </div>`;
         }).join('');
     // Селекти фільтрів
-    const selectStyle = `padding:6px 28px 6px 10px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #e5e7eb;background:white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 8px center;-webkit-appearance:none;appearance:none;color:#111827;outline:none;font-family:inherit;transition:0.15s;`;
-    const activeSelectStyle = selectStyle.replace('border:1.5px solid #e5e7eb', 'border:1.5px solid #111827');
     const makeSelect = (vals, stateKey, placeholder) => {
         const cur = window[stateKey] || '';
         const isActive = !!cur;
         const opts = vals.map(v => `<option value="${v.replace(/"/g,'&quot;')}" ${cur===v?'selected':''}>${v}</option>`).join('');
-        return `<select style="${isActive ? activeSelectStyle : selectStyle}" onchange="window['${stateKey}']=this.value;window.renderFinancesDashboard();">
+        return `<select class="fin-select ${isActive ? 'fin-select--active' : ''}" onchange="window['${stateKey}']=this.value;window.renderFinancesDashboard();">
             <option value="">${placeholder}</option>
             ${opts}
         </select>`;
     };
     const hasFilters = window._finFilterProd || window._finFilterSize || window._finFilterColor;
     const filtersHtml = (allProds.length > 1 || allSizes.length > 1 || allColors.length > 1) ? `
-        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+        <div class="fin-filters-row">
             ${allProds.length  > 1 ? makeSelect(allProds,  '_finFilterProd',  'Товар')  : ''}
             ${allSizes.length  > 1 ? makeSelect(allSizes,  '_finFilterSize',  'Розмір') : ''}
             ${allColors.length > 1 ? makeSelect(allColors, '_finFilterColor', 'Колір')  : ''}
             ${hasFilters ? `<button onclick="window._finFilterProd='';window._finFilterSize='';window._finFilterColor='';window.renderFinancesDashboard();" class="fin-reset-btn">✕ Скинути</button>` : ''}
         </div>` : '';
     container.innerHTML = `
-        <div style="padding:0 0 20px 0;">
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
-                <h2 style="margin:0;font-size:18px;font-weight:800;color:#111827;">Фінансова аналітика</h2>
-                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                    <div style="display:flex;gap:6px;flex-wrap:wrap;">${periodBtns}</div>
+        <div class="fin-wrap">
+            <div class="fin-header">
+                <h2 class="fin-title">Фінансова аналітика</h2>
+                <div class="fin-controls">
+                    <div class="fin-period-btns">${periodBtns}</div>
                     <button onclick="window.resetFinancesView()" class="fin-action-btn" title="Скинути фільтри та вигляд">↺ Скинути</button>
                     <button onclick="window.resetAllPriceData()" class="fin-clear-btn" title="Очистити всі збережені ціни і доставку з замовлень">🗑 Очистити ціни</button>
                 </div>
             </div>
             ${customDateHtml}
-            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:24px;${customDateHtml ? 'margin-top:14px;' : ''}">
+            <div class="fin-summary-grid ${customDateHtml ? 'fin-summary-grid--mt' : ''}">
                 ${summaryCards}
             </div>
-            <div style="background:white;border:1.5px solid #f3f4f6;border-radius:16px;overflow:hidden;">
-                <div style="padding:14px 16px;border-bottom:1px solid #f3f4f6;">
-                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-                        <span style="font-size:13px;font-weight:700;color:#111827;">Деталізація (${filtered.length} позицій)</span>
+            <div class="fin-table-wrap">
+                <div class="fin-table-header">
+                    <div class="fin-table-header-row">
+                        <span class="fin-table-title">Деталізація (${filtered.length} позицій)</span>
                         ${filtersHtml}
                     </div>
                 </div>
@@ -3630,14 +3577,7 @@ window.renderRecipeCards = function() {
     let sizesHtml = sizes.map(size => {
         let isActive = window.activeRecipeSize === size;
         let totalOrders = colors.reduce((sum, c) => sum + (orderCounts[size+'|'+c]||0), 0);
-        return `<div onclick="window.activeRecipeSize='${size}'; window.renderRecipeCards();" style="
-            display:inline-flex; align-items:center; gap:8px;
-            padding: 10px 20px; border-radius: 12px; cursor: pointer;
-            font-weight: 700; font-size: 15px; transition: all 0.2s;
-            background: ${isActive ? '#111827' : '#f3f4f6'};
-            color: ${isActive ? 'white' : '#6B7280'};
-            border: 2px solid ${isActive ? '#111827' : 'transparent'};
-        ">${size}${totalOrders > 0 ? `<span style="background:${isActive?'rgba(255,255,255,0.2)':'#e5e7eb'};color:${isActive?'white':'#374151'};font-size:11px;font-weight:700;padding:2px 7px;border-radius:20px;">${totalOrders}</span>` : ''}</div>`;
+        return `<div onclick="window.activeRecipeSize='${size}'; window.renderRecipeCards();" class="recipe-size-btn ${isActive ? 'recipe-size-btn--active' : 'recipe-size-btn--inactive'}">${size}${totalOrders > 0 ? `<span class="${isActive ? 'recipe-size-count--active' : 'recipe-size-count--inactive'}">${totalOrders}</span>` : ''}</div>`;
     }).join('');
     // Картки кольорів для активного розміру
     let cardsHtml = '';
@@ -3652,37 +3592,31 @@ window.renderRecipeCards = function() {
             let avgDelivery = avg.delivery;
             let profit = avgPrice > 0 ? (avgPrice - cost - avgDelivery) : null;
             let colorObj = (window.hwColors||[]).find(x=>x.name===color) || (window.kopilkaColors||[]).find(x=>x.name===color);
-            let dot = colorObj ? `<span style="width:10px;height:10px;border-radius:50%;background:${colorObj.hex};border:1px solid rgba(0,0,0,0.1);display:inline-block;flex-shrink:0;"></span>` : '';
+            let dot = colorObj ? `<span class="color-dot" style="background:${colorObj.hex};"></span>` : '';
             let profitColor = profit !== null ? (profit >= 0 ? '#16a34a' : '#dc2626') : '#9ca3af';
             let hasRecipe = cost > 0;
             let isSelected = window.activeRecipeColor === color && window.activeRecipeSize === size;
-            cardsHtml += `<div onclick="window.openRecipeDetail('${size}','${color.replace(/'/g,"\\'")}'); " style="
-                background:${isSelected ? '#f8faff' : 'white'}; 
-                border:2px solid ${isSelected ? '#6366f1' : (hasRecipe ? '#e5e7eb' : '#f3f4f6')};
-                border-radius:14px; padding:16px 18px; cursor:pointer;
-                transition:all 0.18s; display:flex; flex-direction:column; gap:10px;
-                box-shadow:${isSelected ? '0 4px 16px rgba(99,102,241,0.12)' : 'none'};
-            ">
-                <div style="display:flex;align-items:center;gap:8px;">
+            cardsHtml += `<div onclick="window.openRecipeDetail('${size}','${color.replace(/'/g,"\\'")}'); " class="recipe-color-card ${isSelected ? 'is-selected' : ''} ${hasRecipe ? 'has-recipe' : ''}">
+                <div class="recipe-card-header">
                     ${dot}
-                    <span style="font-size:14px;font-weight:700;color:#111827;">${color}</span>
-                    ${orders > 0 ? `<span style="margin-left:auto;font-size:11px;font-weight:700;color:#6B7280;background:#f3f4f6;padding:2px 8px;border-radius:20px;">${orders} зам.</span>` : ''}
+                    <span class="recipe-card-name">${color}</span>
+                    ${orders > 0 ? `<span class="badge-size-pill ml-auto">${orders} зам.</span>` : ''}
                 </div>
-                <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#9ca3af;">
+                <div class="recipe-card-stat">
                     <span>Собівартість</span>
-                    <span style="font-weight:700;color:${hasRecipe?'#111827':'#d1d5db'};">${hasRecipe ? cost.toFixed(2)+' ₴' : '—'}</span>
+                    <span class="recipe-stat-value" style="color:${hasRecipe?'#111827':'#d1d5db'};">${hasRecipe ? cost.toFixed(2)+' ₴' : '—'}</span>
                 </div>
-                ${avgPrice > 0 ? `<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#9ca3af;"><span>Ціна (сер.)</span><span style="font-weight:700;color:#111827;">${avgPrice} ₴</span></div>` : ''}
-                <div style="display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid #f3f4f6;">
-                    <span style="font-size:12px;color:#9ca3af;">Прибуток</span>
-                    <span style="font-size:14px;font-weight:800;color:${profitColor};">${profit !== null ? profit.toFixed(0)+' ₴' : '—'}</span>
+                ${avgPrice > 0 ? `<div class="recipe-avg-price"><span>Ціна (сер.)</span><span class="recipe-avg-value">${avgPrice} ₴</span></div>` : ''}
+                <div class="recipe-card-profit">
+                    <span class="recipe-profit-label">Прибуток</span>
+                    <span class="recipe-profit-value" style="color:${profitColor};">${profit !== null ? profit.toFixed(0)+' ₴' : '—'}</span>
                 </div>
             </div>`;
         });
     }
     container.innerHTML = `
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">${sizesHtml}</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;">${cardsHtml}</div>
+        <div class="recipe-sizes-wrap">${sizesHtml}</div>
+        <div class="recipe-cards-grid">${cardsHtml}</div>
     `;
 };
 window._prodCardHtml = function(size, color, dot, cost, orders, profit, pricing) {
@@ -3698,10 +3632,10 @@ window._prodCardHtml = function(size, color, dot, cost, orders, profit, pricing)
         <div class="prod-card-stat"><span>Замовлень</span><span>${orders}</span></div>
         ${pricing.price ? `<div class="prod-card-stat"><span>Ціна</span><span>${pricing.price} ₴</span></div>` : ''}
         <div class="prod-card-profit">
-            <span style="font-size:12px; color:#6B7280; font-weight:600;">Прибуток</span>
-            <span style="font-size:15px; font-weight:800; color:${profitColor};">${profitText}</span>
+            <span class="recipe-profit-line">Прибуток</span>
+            <span class="recipe-profit-big" style="color:${profitColor};">${profitText}</span>
         </div>
-        ${profit !== null ? `<div style="text-align:right; font-size:11px; color:${profitColor}; font-weight:700; margin-top:4px;">Маржа: ${marginText}</div>` : ''}
+        ${profit !== null ? `<div class="recipe-margin-text" style="color:${profitColor};">Маржа: ${marginText}</div>` : ''}
     </div>`;
 };
 window.activeRecipeColor = null;
@@ -3748,8 +3682,8 @@ window.openRecipeDetail = function(size, color) {
     detailView.style.display = '';
     const prod = window.currentRecipeProduct;
     let colorObj = (window.hwColors||[]).find(x=>x.name===color) || (window.kopilkaColors||[]).find(x=>x.name===color);
-    let dot = colorObj ? `<span style="width:13px;height:13px;border-radius:50%;background:${colorObj.hex};border:1px solid rgba(0,0,0,0.1);display:inline-block;flex-shrink:0;"></span>` : '';
-    document.getElementById('detailTitle').innerHTML = `${size !== 'all' ? `<span style="color:#9ca3af;font-weight:700;">${size}</span> ·` : ''} ${dot} ${color}`;
+    let dot = colorObj ? `<span class="color-dot--13" style="background:${colorObj.hex};"></span>` : '';
+    document.getElementById('detailTitle').innerHTML = `${size !== 'all' ? `<span class="recipe-detail-size">${size}</span> ·` : ''} ${dot} ${color}`;
     // Заповнюємо середніми значеннями з таблиці
     window.updateDetailPriceFromAvg(prod, size, color);
     let tempGroup = {};
@@ -3843,16 +3777,16 @@ window.renderRecipeRulesList = function() {
     colorTabs.innerHTML = colors.map(c => {
         let text = c === 'all' ? 'Всі кольори' : c;
         let colObj = (window.hwColors||[]).find(x=>x.name===c) || (window.kopilkaColors||[]).find(x=>x.name===c);
-        let dot = colObj ? `<span style="display:inline-block;min-width:12px;width:12px;height:12px;border-radius:50%;background:${colObj.hex};border:1px solid rgba(0,0,0,0.1);"></span>` : '';
+        let dot = colObj ? `<span class="color-dot--12" style="background:${colObj.hex};"></span>` : '';
         return `<button class="r-subtab ${window.currentRecipeColor === c ? 'active' : ''}" onclick="window.currentRecipeColor='${c.replace(/'/g,"\\'")}'; window.renderRecipeRulesList(); window.syncDetailPriceFields();">${dot}${text}</button>`;
     }).join('');
     let ruleIndex = window.recipeRules.findIndex(r => (r.size||'all') === window.currentRecipeSize && (r.productColor||'all') === window.currentRecipeColor);
     let currentRule = window.recipeRules[ruleIndex];
     if (!currentRule) {
-        container.innerHTML = `<div style="text-align:center; padding:40px 20px;">
-            <div style="font-size:40px; margin-bottom:12px;">🗂️</div>
-            <h4 style="margin:0 0 8px 0; color:#111827;">Рецепт не створено</h4>
-            <p style="color:#6B7280; font-size:13px; margin:0 auto 20px; max-width:300px;">Для <b>${window.currentRecipeSize === 'all' ? 'Всі розміри' : window.currentRecipeSize}</b> + <b>${window.currentRecipeColor === 'all' ? 'Всі кольори' : window.currentRecipeColor}</b></p>
+        container.innerHTML = `<div class="recipe-empty">
+            <div class="recipe-empty-icon">🗂️</div>
+            <h4 class="recipe-empty-title">Рецепт не створено</h4>
+            <p class="recipe-empty-sub">Для <b>${window.currentRecipeSize === 'all' ? 'Всі розміри' : window.currentRecipeSize}</b> + <b>${window.currentRecipeColor === 'all' ? 'Всі кольори' : window.currentRecipeColor}</b></p>
             <button class="mac-btn-primary" onclick="window.createSpecificRecipe('${window.currentRecipeSize}', '${window.currentRecipeColor.replace(/'/g,"\\'")}')">+ Створити рецепт</button>
         </div>`;
         // Оновлюємо собівартість у деталях
@@ -3869,10 +3803,10 @@ window.renderRecipeRulesList = function() {
         const unitText = mat.type === 'color' ? 'мл' : mat.unit;
         let iconHtml = '';
         if (mat.type === 'color') {
-            iconHtml = `<span style="display:inline-block;min-width:16px;width:16px;height:16px;background-color:${mat.hex};border:1px solid rgba(0,0,0,0.15);border-radius:50%;flex-shrink:0;margin:0;"></span>`;
+            iconHtml = `<span class="color-dot--16" style="background-color:${mat.hex};"></span>`;
         } else {
             let iconStyle = getIconStyleForMaterial(mat.name);
-            iconHtml = `<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;background:${iconStyle.bg};color:${iconStyle.color};margin:0;flex-shrink:0;">${iconStyle.svg.replace('width:24px; height:24px;','width:14px; height:14px;')}</span>`;
+            iconHtml = `<span class="recipe-mat-icon-color" style="background:${iconStyle.bg};color:${iconStyle.color};">${iconStyle.svg.replace('width:24px; height:24px;','width:14px; height:14px;')}</span>`;
         }
         if (isActive) {
             let realMat = materialsData.find(m => m.name === mat.name);
@@ -3880,18 +3814,18 @@ window.renderRecipeRulesList = function() {
             let itemCost = (parseFloat(amt) || 0) * matPrice;
             ruleTotalCost += itemCost;
             let tagHtml = `
-            <div style="background:white;border:1px solid #e5e7eb;border-radius:16px;padding:12px;width:140px;display:flex;flex-direction:column;position:relative;">
+            <div class="recipe-mat-card">
                 <svg viewBox="0 0 16 16" class="recipe-remove-icon" onclick="event.stopPropagation();removeRecipeMat(${ruleIndex},'${mat.name.replace(/'/g,"\\'")}')"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
-                <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding-right:16px;">${iconHtml}<span style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;font-weight:600;">${mat.name}</span></div>
-                <div style="display:flex;align-items:baseline;gap:6px;">
-                    <input type="number" value="${amt}" placeholder="0" style="width:60px;padding:2px 0;border:none;border-bottom:2px solid #e5e7eb;font-size:16px;font-weight:700;outline:none;text-align:center;background:transparent;" onchange="updateRecipeMatAmount(${ruleIndex},'${mat.name.replace(/'/g,"\\'")}',this.value);window.renderRecipeRulesList();">
-                    <span style="font-size:12px;color:#6B7280;">${unitText}</span>
+                <div class="recipe-mat-header">${iconHtml}<span class="recipe-mat-name">${mat.name}</span></div>
+                <div class="recipe-mat-input-row">
+                    <input type="number" value="${amt}" placeholder="0" class="recipe-mat-input" onchange="updateRecipeMatAmount(${ruleIndex},'${mat.name.replace(/'/g,"\\'")}',this.value);window.renderRecipeRulesList();">
+                    <span class="recipe-mat-unit">${unitText}</span>
                 </div>
             </div>`;
             if (mat.type === 'color') activeColorsHtml += tagHtml;
             else activeBasicsHtml += tagHtml;
         } else {
-            let optHtml = `<div class="dropdown-option" style="display:flex;align-items:center;" onclick="addRecipeMat(${ruleIndex},'${mat.name.replace(/'/g,"\\'")}',event)">${iconHtml.replace('margin:0','margin-right:8px')} ${mat.name}</div>`;
+            let optHtml = `<div class="dropdown-option recipe-dropdown-opt" onclick="addRecipeMat(${ruleIndex},'${mat.name.replace(/'/g,"\\'")}',event)">${iconHtml.replace('margin:0','margin-right:8px')} ${mat.name}</div>`;
             if (mat.type === 'color') inactiveColorsHtml += optHtml;
             else inactiveBasicsHtml += optHtml;
         }
@@ -3902,23 +3836,23 @@ window.renderRecipeRulesList = function() {
         window.calcDetailProfit();
     }
     container.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-            <span style="font-size:14px;font-weight:600;color:#111827;">Матеріали рецепту</span>
-            <button style="color:#ef4444;background:#fee2e2;border:none;padding:6px 12px;border-radius:8px;font-weight:600;font-size:12px;cursor:pointer;" onclick="window.deleteSpecificRecipe(${ruleIndex})">Видалити рецепт</button>
+        <div class="recipe-rules-header">
+            <span class="recipe-rules-title">Матеріали рецепту</span>
+            <button class="recipe-rules-delete" onclick="window.deleteSpecificRecipe(${ruleIndex})">Видалити рецепт</button>
         </div>
-        <div style="margin-bottom:24px;">
-            <div style="font-size:11px;color:#9ca3af;font-weight:700;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;">Фарба</div>
-            <div style="display:flex;flex-wrap:wrap;gap:12px;">
+        <div class="recipe-section">
+            <div class="recipe-section-label">Фарба</div>
+            <div class="recipe-section-items">
                 ${activeColorsHtml}
                 ${inactiveColorsHtml ? `<div class="custom-dropdown" tabindex="0" onblur="this.classList.remove('open')" onclick="this.classList.toggle('open')" class="recipe-add-dropdown"><div class="recipe-add-placeholder"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" ><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg><span >Додати колір</span></div><div class="dropdown-list" class="recipe-dropdown-list">${inactiveColorsHtml}</div></div>` : ''}
             </div>
         </div>
-        <div style="height:1px;background:#e5e7eb;margin:0 -24px 24px -24px;"></div>
+        <div class="recipe-section-divider"></div>
         <div>
-            <div style="font-size:11px;color:#9ca3af;font-weight:700;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;">Основні матеріали</div>
-            <div style="display:flex;flex-wrap:wrap;gap:12px;">
+            <div class="recipe-section-label">Основні матеріали</div>
+            <div class="recipe-section-items">
                 ${activeBasicsHtml}
-                ${inactiveBasicsHtml ? `<div class="custom-dropdown" tabindex="0" onblur="this.classList.remove('open')" onclick="this.classList.toggle('open')" class="recipe-add-dropdown"><div class="recipe-add-placeholder"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" ><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg><span >Додати матеріал</span></div><div class="dropdown-list" class="recipe-dropdown-list">${inactiveBasicsHtml}</div></div>` : ''}
+                ${inactiveBasicsHtml ? `<div class="custom-dropdown recipe-add-dropdown" tabindex="0" onblur="this.classList.remove('open')" onclick="this.classList.toggle('open')"><div class="recipe-add-placeholder"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" ><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg><span >Додати матеріал</span></div><div class="dropdown-list recipe-dropdown-list">${inactiveBasicsHtml}</div></div>` : ''}
             </div>
         </div>
     `;
@@ -3936,10 +3870,10 @@ window.renderRecipeContent = function() {
     let ruleIndex = window.recipeRules.findIndex(r => (r.size||'all') === size && (r.productColor||'all') === color);
     let currentRule = window.recipeRules[ruleIndex];
     if (!currentRule) {
-        container.innerHTML = `<div style="text-align:center;padding:40px 20px;">
-            <div style="font-size:36px;margin-bottom:12px;">🗂️</div>
-            <div style="font-size:14px;font-weight:600;color:#374151;margin-bottom:6px;">Рецепт не створено</div>
-            <div style="font-size:12px;color:#9ca3af;margin-bottom:20px;">Для ${size} · ${color}</div>
+        container.innerHTML = `<div class="placeholder-empty">
+            <div class="placeholder-icon--sm">🗂️</div>
+            <div class="placeholder-title">Рецепт не створено</div>
+            <div class="placeholder-sub">Для ${size} · ${color}</div>
             <button class="mac-btn-primary" onclick="window.createSpecificRecipe('${size}','${color.replace(/'/g,"\\'")}')">+ Створити рецепт</button>
         </div>`;
         if (document.getElementById('detailCostBadge')) document.getElementById('detailCostBadge').innerText = 'Собівартість: 0.00 ₴';
@@ -3953,22 +3887,22 @@ window.renderRecipeContent = function() {
         const isActive = amt !== undefined;
         const unitText = mat.type === 'color' ? 'мл' : mat.unit;
         let iconHtml = mat.type === 'color'
-            ? `<span style="display:inline-block;min-width:14px;width:14px;height:14px;background:${mat.hex};border:1px solid rgba(0,0,0,0.12);border-radius:50%;flex-shrink:0;"></span>`
-            : `<span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px;background:${getIconStyleForMaterial(mat.name).bg};color:${getIconStyleForMaterial(mat.name).color};flex-shrink:0;">${getIconStyleForMaterial(mat.name).svg.replace('width:24px; height:24px;','width:13px; height:13px;')}</span>`;
+            ? `<span class="color-dot--14" style="background:${mat.hex};"></span>`
+            : `<span class="recipe-mat-icon-color recipe-mat-icon-color--sm" style="background:${getIconStyleForMaterial(mat.name).bg};color:${getIconStyleForMaterial(mat.name).color};">${getIconStyleForMaterial(mat.name).svg.replace('width:24px; height:24px;','width:13px; height:13px;')}</span>`;
         if (isActive) {
             let matPrice = parseFloat(materialsData.find(m=>m.name===mat.name)?.price)||0;
             ruleTotalCost += (parseFloat(amt)||0) * matPrice;
-            let card = `<div style="background:white;border:1px solid #e5e7eb;border-radius:14px;padding:12px;width:130px;display:flex;flex-direction:column;position:relative;">
+            let card = `<div class="recipe-mat-card--sm">
                 <svg viewBox="0 0 16 16" class="recipe-remove-icon--sm" onclick="event.stopPropagation();removeRecipeMat(${ruleIndex},'${mat.name.replace(/'/g,"\\'")}')"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
-                <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px;padding-right:14px;">${iconHtml}<span style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;font-weight:600;color:#374151;">${mat.name}</span></div>
-                <div style="display:flex;align-items:baseline;gap:5px;">
-                    <input type="number" value="${amt}" placeholder="0" style="width:55px;padding:2px 0;border:none;border-bottom:1.5px solid #e5e7eb;font-size:15px;font-weight:700;outline:none;text-align:center;background:transparent;color:#111827;" onchange="updateRecipeMatAmount(${ruleIndex},'${mat.name.replace(/'/g,"\\'")}',this.value);window.renderRecipeContent();window.calcDetailProfit();">
-                    <span style="font-size:11px;color:#9ca3af;">${unitText}</span>
+                <div class="recipe-mat-header--sm">${iconHtml}<span class="recipe-mat-name--sm">${mat.name}</span></div>
+                <div class="recipe-mat-input-row--sm">
+                    <input type="number" value="${amt}" placeholder="0" class="recipe-mat-input--sm" onchange="updateRecipeMatAmount(${ruleIndex},'${mat.name.replace(/'/g,"\\'")}',this.value);window.renderRecipeContent();window.calcDetailProfit();">
+                    <span class="recipe-mat-unit--sm">${unitText}</span>
                 </div>
             </div>`;
             if (mat.type==='color') activeColorsHtml += card; else activeBasicsHtml += card;
         } else {
-            let opt = `<div class="dropdown-option" style="display:flex;align-items:center;gap:8px;" onclick="addRecipeMat(${ruleIndex},'${mat.name.replace(/'/g,"\\'")}',event)">${iconHtml} ${mat.name}</div>`;
+            let opt = `<div class="dropdown-option recipe-dropdown-opt--gap" onclick="addRecipeMat(${ruleIndex},'${mat.name.replace(/'/g,"\\'")}',event)">${iconHtml} ${mat.name}</div>`;
             if (mat.type==='color') inactiveColorsHtml += opt; else inactiveBasicsHtml += opt;
         }
     });
@@ -3978,9 +3912,9 @@ window.renderRecipeContent = function() {
     }
     const addBtn = (label, inactive) => inactive ? `<div class="custom-dropdown" tabindex="0" onblur="this.classList.remove('open')" onclick="this.classList.toggle('open')" class="recipe-add-dropdown--sm"><div class="recipe-add-placeholder--sm"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" ><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg><span >${label}</span></div><div class="dropdown-list" class="recipe-dropdown-list--sm">${inactive}</div></div>` : '';
     container.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-            <div style="display:flex;align-items:center;gap:10px;">
-                <span style="font-size:13px;font-weight:700;color:#374151;">Матеріали</span>
+        <div class="recipe-content-header">
+            <div class="recipe-content-title-row">
+                <span class="recipe-content-title">Матеріали</span>
                 <button onclick="window.openCopyRecipePopover(this)" class="recipe-copy-btn">
                     <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                     Скопіювати рецепт
@@ -3988,15 +3922,15 @@ window.renderRecipeContent = function() {
             </div>
             <button class="recipe-delete-btn" onclick="window.deleteSpecificRecipe(${ruleIndex})">Видалити рецепт</button>
         </div>
-        <div id="copyRecipePopover" style="display:none;position:relative;z-index:50;margin-bottom:14px;"></div>
-        <div style="margin-bottom:20px;">
-            <div style="font-size:10px;color:#9ca3af;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Фарба</div>
-            <div style="display:flex;flex-wrap:wrap;gap:10px;">${activeColorsHtml}${addBtn('Додати колір', inactiveColorsHtml)}</div>
+        <div id="copyRecipePopover" class="recipe-copy-wrap"></div>
+        <div class="recipe-content-section">
+            <div class="recipe-content-label">Фарба</div>
+            <div class="recipe-content-items">${activeColorsHtml}${addBtn('Додати колір', inactiveColorsHtml)}</div>
         </div>
-        <div style="height:1px;background:#f3f4f6;margin:0 -20px 20px;"></div>
+        <div class="recipe-content-divider"></div>
         <div>
-            <div style="font-size:10px;color:#9ca3af;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Основні матеріали</div>
-            <div style="display:flex;flex-wrap:wrap;gap:10px;">${activeBasicsHtml}${addBtn('Додати матеріал', inactiveBasicsHtml)}</div>
+            <div class="recipe-content-label">Основні матеріали</div>
+            <div class="recipe-content-items">${activeBasicsHtml}${addBtn('Додати матеріал', inactiveBasicsHtml)}</div>
         </div>
     `;
 };
@@ -4026,21 +3960,20 @@ window.openCopyRecipePopover = function(btn) {
     const filtered = options.filter(o => !(o.prod === currProd && o.size === currSize && o.color === currColor));
     if (filtered.length === 0) {
         popover.style.display = 'block';
-        popover.innerHTML = '<div style="background:white;border:1.5px solid #e5e7eb;border-radius:12px;padding:14px 16px;font-size:12px;color:#9ca3af;">Немає інших рецептів для копіювання</div>';
+        popover.innerHTML = '<div class="copy-popover-empty">Немає інших рецептів для копіювання</div>';
         return;
     }
     const itemsHtml = filtered.map(o => {
         const ps = o.prod.replace(/'/g, "\\'");
         const cs = o.color.replace(/'/g, "\\'");
         return `<div onclick="window.copyRecipeFrom('${ps}','${o.size}','${cs}');document.getElementById('copyRecipePopover').style.display='none';"
-            style="padding:9px 14px;font-size:12px;font-weight:500;color:#111827;cursor:pointer;border-radius:8px;transition:0.12s;"
-            class="copy-recipe-item">
+            class="copy-popover-item">
             ${o.label}
         </div>`;
     }).join('');
     popover.style.display = 'block';
-    popover.innerHTML = `<div style="background:white;border:1.5px solid #e5e7eb;border-radius:12px;padding:6px;box-shadow:0 4px 16px rgba(0,0,0,0.08);max-height:220px;overflow-y:auto;">
-        <div style="padding:8px 14px 6px;font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;">Скопіювати з:</div>
+    popover.innerHTML = `<div class="copy-popover">
+        <div class="copy-popover-title">Скопіювати з:</div>
         ${itemsHtml}
     </div>`;
 };
@@ -4141,7 +4074,7 @@ function formatOrderDate(value) {
 }
 function getDefaultStatusHtml() {
     let defaultStatus = menuData['status']?.find(s => s.text === 'Нове') || { text: 'Нове', class: 'badge-status', customStyle: 'background-color: #e3e2e0; color: #37352f;' };
-    return `<div class="clamp-wrapper" style="align-items:center; display:flex; justify-content:center; height:100%; width:100%;"><span class="badge ${defaultStatus.class || 'badge-status'}" style="${defaultStatus.customStyle || ''}">${defaultStatus.text}</span></div>`;
+    return `<div class="clamp-wrapper clamp-center"><span class="badge ${defaultStatus.class || 'badge-status'}" style="${defaultStatus.customStyle || ''}">${defaultStatus.text}</span></div>`;
 }
 function getStatusHtml(statusText) {
     if (!statusText) return getDefaultStatusHtml();
@@ -4157,13 +4090,13 @@ function getStatusHtml(statusText) {
     // Fallback на FIXED_STATUSES
     if (!statusItem) statusItem = FIXED_STATUSES.find(s => s.text === normalized);
     if (!statusItem) return getDefaultStatusHtml();
-    return `<div class="clamp-wrapper" style="align-items:center; display:flex; justify-content:center; height:100%; width:100%;"><span class="badge ${statusItem.class || 'badge-status'}" style="${statusItem.customStyle || ''}">${statusItem.text}</span></div>`;
+    return `<div class="clamp-wrapper clamp-center"><span class="badge ${statusItem.class || 'badge-status'}" style="${statusItem.customStyle || ''}">${statusItem.text}</span></div>`;
 }
 function getSourceHtml(sourceValue) {
     const sourceText = (sourceValue || '').trim();
     let sourceItem = menuData['source']?.find(s => (s.text || '').trim().toLowerCase() === sourceText.toLowerCase());
     if (!sourceItem) return `<div class="clamp-wrapper"><span>${sourceText}</span></div>`;
-    return `<div class="clamp-wrapper" style="align-items:center; display:flex; justify-content:center; height:100%; width:100%;"><span class="badge ${sourceItem.class || ''}" style="${sourceItem.customStyle || ''}">${sourceItem.text}</span></div>`;
+    return `<div class="clamp-wrapper clamp-center"><span class="badge ${sourceItem.class || ''}" style="${sourceItem.customStyle || ''}">${sourceItem.text}</span></div>`;
 }
 const PRODUCT_ALIASES = {
     'Копілка': ['копілка', 'копилка', 'kopilka', 'piggy bank', 'money box', 'coin bank'],
@@ -4182,8 +4115,8 @@ function normalizeProductTitle(productValue) {
 function getProductHtml(productValue) {
     const normalized = normalizeProductTitle(productValue);
     let productItem = menuData['product']?.find(p => (p.text || '').trim().toLowerCase() === normalized.toLowerCase());
-    if (!productItem) return `<div class="clamp-wrapper" style="text-align:center;">${normalized}</div>`;
-    return `<div class="clamp-wrapper" style="align-items:center; display:flex; justify-content:center; height:100%; width:100%;"><span class="badge ${productItem.class || 'badge-status'}" style="${productItem.customStyle || ''}">${productItem.text}</span></div>`;
+    if (!productItem) return `<div class="clamp-wrapper clamp-wrapper--center">${normalized}</div>`;
+    return `<div class="clamp-wrapper clamp-center"><span class="badge ${productItem.class || 'badge-status'}" style="${productItem.customStyle || ''}">${productItem.text}</span></div>`;
 }
 function splitSmart(value) {
     if (!value) return [];
@@ -4196,7 +4129,7 @@ window.formatHwPersHtml = function(rawVal) {
     const isHwFormat = lines.some(l => l.startsWith('Табличка:') || l.startsWith('Вантажівка:'));
     if (!isHwFormat) {
         // Звичайний текст від Etsy — показуємо як є
-        return `<div class="clamp-wrapper" style="width:100%; text-align:center;"><span class="badge" style="background:white; color:var(--c-texPri); border:1px solid #d1d1d1; padding:2px 8px; font-size:12px; height:auto; white-space:normal; text-align:center;">${rawVal.replace(/\n/g, '<br>')}</span></div>`;
+        return `<div class="clamp-wrapper clamp-text-center"><span class="badge badge-text">${rawVal.replace(/\n/g, '<br>')}</span></div>`;
     }
     const displayHtml = lines.map(l => {
         const colonIdx = l.indexOf(': ');
@@ -4204,9 +4137,9 @@ window.formatHwPersHtml = function(rawVal) {
         const title = l.slice(0, colonIdx);
         const val = l.slice(colonIdx + 2).trim();
         const textVal = (val === 'є' || val === '') ? 'Без тексту' : val.replace(/"/g, '&quot;');
-        return `<div style="display:flex; flex-direction:column; margin-bottom:6px; align-items:center;"><div style="font-size:11px; color:var(--c-texSec); margin-bottom:2px; line-height:1; font-weight:400;">${title}</div><span class="badge" style="background:white; color:var(--c-texPri); border:1px solid #d1d1d1; padding:2px 8px; font-size:12px; height:auto; min-height:24px; text-transform:none; font-weight:500; display:inline-block; max-width:100%; white-space:normal !important; line-height:1.2; text-align:center;">${textVal}</span></div>`;
+        return `<div class="pers-label"><div class="pers-label-title">${title}</div><span class="badge badge-multiline">${textVal}</span></div>`;
     }).join('');
-    return `<div class="clamp-wrapper" style="width:100%; display:flex; flex-direction:column; align-items:center;">${displayHtml}</div>`;
+    return `<div class="clamp-wrapper clamp-col-center">${displayHtml}</div>`;
 };
 // === WISH TREE: рендер персоналізації ===
 window.formatWtPersHtml = function(rawVal) {
@@ -4214,15 +4147,15 @@ window.formatWtPersHtml = function(rawVal) {
     const lines = rawVal.split('\n').map(l => l.trim()).filter(Boolean);
     const isWtFormat = lines.some(l => l.startsWith('Пара імен:') || l.startsWith('Прізвище:') || l.startsWith('Дата:'));
     if (!isWtFormat) {
-        return `<div class="clamp-wrapper" style="width:100%; text-align:center;"><span class="badge" style="background:white; color:var(--c-texPri); border:1px solid #d1d1d1; padding:2px 8px; font-size:12px; height:auto; white-space:normal; text-align:center;">${rawVal.replace(/\n/g, '<br>')}</span></div>`;
+        return `<div class="clamp-wrapper clamp-text-center"><span class="badge badge-text">${rawVal.replace(/\n/g, '<br>')}</span></div>`;
     }
-    const makeBadge = (title, val) => `<div style="display:flex; flex-direction:column; margin-bottom:6px; align-items:center;"><div style="font-size:11px; color:var(--c-texSec); margin-bottom:2px; line-height:1; font-weight:400;">${title}</div><span class="badge" style="background:white; color:var(--c-texPri); border:1px solid #d1d1d1; padding:2px 8px; font-size:12px; height:auto; min-height:24px; text-transform:none; font-weight:500; display:inline-block; max-width:100%; white-space:normal !important; line-height:1.2; text-align:center;">${val.replace(/"/g, '&quot;') || '—'}</span></div>`;
+    const makeBadge = (title, val) => `<div class="pers-label"><div class="pers-label-title">${title}</div><span class="badge badge-multiline">${val.replace(/"/g, '&quot;') || '—'}</span></div>`;
     const get = (prefix) => { const l = lines.find(l => l.startsWith(prefix + ':')); return l ? l.slice(prefix.length + 1).trim() : ''; };
     let html = '';
     const para = get('Пара імен'); if (para) html += makeBadge('Пара імен', para);
     const priz = get('Прізвище'); if (priz) html += makeBadge('Прізвище', priz);
     const data = get('Дата'); if (data) html += makeBadge('Дата', data);
-    return `<div class="clamp-wrapper" style="width:100%; display:flex; flex-direction:column; align-items:center;">${html}</div>`;
+    return `<div class="clamp-wrapper clamp-col-center">${html}</div>`;
 };
 // === WISH TREE: Popovers ===
 // Рядок у wtPersPopover — аналог addHwPersRow
@@ -4233,7 +4166,7 @@ window.addWtPersRow = function(type, text) {
     const label = labels[type] || type;
     const ph = placeholders[type] || '';
     const row = document.createElement('div'); row.className = 'pers-input-row'; row.id = 'wtRow' + type;
-    row.innerHTML = `<div style="flex-shrink:0; width:80px; font-size:12px; color:var(--c-texPri); font-weight:500;">${label}</div><input type="text" id="wtInp${type}" value="${(text||'').replace(/"/g,'&quot;')}" placeholder="${ph}" onkeydown="if(event.key==='Enter'){event.preventDefault(); window.saveWtPers();}"><div class="del-pers-btn" onclick="this.parentElement.remove()" title="Видалити"><svg viewBox="0 0 16 16" style="width:14px;height:14px;fill:currentColor;"><path d="M12.642 3.358a.625.625 0 0 0-.884 0L8 7.116 4.242 3.358a.625.625 0 1 0-.884.884L7.116 8l-3.758 3.758a.625.625 0 0 0 .884.884L8 8.884l3.758 3.758a.625.625 0 1 0 .884-.884L8.884 8l3.758-3.758a.625.625 0 1 0 .884-.884L8.884 8l3.758-3.758a.625.625 0 0 0 0-.884"></path></svg></div>`;
+    row.innerHTML = `<div class="wt-pers-label">${label}</div><input type="text" id="wtInp${type}" value="${(text||'').replace(/"/g,'&quot;')}" placeholder="${ph}" onkeydown="if(event.key==='Enter'){event.preventDefault(); window.saveWtPers();}"><div class="del-pers-btn" onclick="this.parentElement.remove()" title="Видалити"><svg viewBox="0 0 16 16" class="del-icon-svg"><path d="M12.642 3.358a.625.625 0 0 0-.884 0L8 7.116 4.242 3.358a.625.625 0 1 0-.884.884L7.116 8l-3.758 3.758a.625.625 0 0 0 .884.884L8 8.884l3.758 3.758a.625.625 0 1 0 .884-.884L8.884 8l3.758-3.758a.625.625 0 1 0 .884-.884L8.884 8l3.758-3.758a.625.625 0 0 0 0-.884"></path></svg></div>`;
     list.appendChild(row);
 };
 window.restoreWtFields = function() {
@@ -4280,11 +4213,11 @@ window.openWtColorPopover = function(td, rect) {
 window.setWtColor = function(colorName) {
     recordUndoState();
     let colorObj = window.wtColors.find(c => c.name === colorName);
-    let inner = `<span style="display:inline-block; min-width:10px; width:10px; height:10px; background-color:${colorObj.hex}; border:1px solid rgba(0,0,0,0.15); border-radius:50%; margin-right:5px; flex-shrink:0;"></span><span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${colorName}</span>`;
-    const topLabel = `<div style="font-size:10px; color:var(--c-texSec); font-weight:500; margin-bottom:3px; line-height:1; text-align:center;">Стенд</div>`;
-    let badgeHtml = `<span class="badge" style="background:white; color:var(--c-texPri); border:1px solid #d1d1d1;">${inner}</span>`;
+    let inner = `<span class="color-dot color-dot--mr5" style="background-color:${colorObj.hex};"></span><span class="text-ellipsis">${colorName}</span>`;
+    const topLabel = `<div class="wt-stand-label">Стенд</div>`;
+    let badgeHtml = `<span class="badge badge-default">${inner}</span>`;
     currentEditingCell.dataset.val = colorName;
-    currentEditingCell.innerHTML = `<div class="clamp-wrapper" style="align-items:center; display:flex; flex-direction:column; justify-content:center; height:100%; width:100%;">${topLabel}${badgeHtml}</div>`;
+    currentEditingCell.innerHTML = `<div class="clamp-wrapper clamp-center--col">${topLabel}${badgeHtml}</div>`;
     saveData(); closeAllPopovers();
     if (typeof syncRowToDb === 'function') syncRowToDb(currentEditingCell.closest('tr'));
 };
@@ -4299,8 +4232,8 @@ window.openWtSizePopover = function(td, rect) {
 window.setWtSize = function(size) {
     recordUndoState();
     currentEditingCell.dataset.val = size;
-    let badgeHtml = `<span class="badge" style="background:white; color:var(--c-texPri); border:1px solid #d1d1d1;">${size}</span>`;
-    currentEditingCell.innerHTML = `<div class="clamp-wrapper" style="align-items:center; display:flex; justify-content:center; height:100%; width:100%;">${badgeHtml}</div>`;
+    let badgeHtml = `<span class="badge badge-default">${size}</span>`;
+    currentEditingCell.innerHTML = `<div class="clamp-wrapper clamp-center">${badgeHtml}</div>`;
     saveData(); closeAllPopovers();
     if (typeof syncRowToDb === 'function') syncRowToDb(currentEditingCell.closest('tr'));
 };
@@ -4308,9 +4241,9 @@ window.formatPersHtml = function(inputsArray) {
     if (!inputsArray || inputsArray.length === 0) return '<div class="clamp-wrapper"></div>';
     let displayHtml = inputsArray.map(v => {
         let textVal = v.replace(/"/g, '&quot;');
-        return `<div class="multi-val-row" style="justify-content: center;"><span class="badge" style="background:white; color:var(--c-texPri); border:1px solid #d1d1d1; padding:2px 8px; font-size:12px; height:auto; min-height:22px; line-height:1.2; text-transform:none; font-weight:500; display:inline-block; max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:center;" title="${textVal}">${textVal}</span></div>`;
+        return `<div class="multi-val-row multi-val-center"><span class="badge badge-inline" title="${textVal}">${textVal}</span></div>`;
     }).join('');
-    return `<div class="clamp-wrapper" style="width:100%; text-align:center;">${displayHtml}</div>`;
+    return `<div class="clamp-wrapper clamp-text-center">${displayHtml}</div>`;
 }
 // Рендер дизайну для Хотвілс при завантаженні з бази
 function renderHwDesignFromVal(rawVal) {
@@ -4324,7 +4257,7 @@ function renderHwDesignFromVal(rawVal) {
     if (typeof window.renderHwDesignHtml === 'function') {
         return window.renderHwDesignHtml(design, shelf);
     }
-    return `<div class="clamp-wrapper" style="text-align:center;">${rawVal}</div>`;
+    return `<div class="clamp-wrapper clamp-wrapper--center">${rawVal}</div>`;
 }
 function createRowFromOrder(orderDocId, order) {
     if (!tbody || tbody.querySelector(`tr[data-order-id="${orderDocId}"]`)) return;
@@ -4384,7 +4317,7 @@ function createRowFromOrder(orderDocId, order) {
             <td class="select-cell" data-type="color" data-val="${colorVal}">${colorHtml}</td>
             <td class="select-cell" data-type="size" data-val="${sizeVal}">${sizeHtml}</td>
             <td class="text-cell" data-type="design" data-val="${designVal}">${designHtml}</td>
-            <td class="text-cell copyable-cell" data-type="recipient" data-val="${order.recipientAddress || ''}"><div class="clamp-wrapper" style="text-align:center;"></div></td>
+            <td class="text-cell copyable-cell" data-type="recipient" data-val="${order.recipientAddress || ''}"><div class="clamp-wrapper clamp-wrapper--center"></div></td>
             <td class="select-cell" data-type="status">${statusHtml}</td>
             <td class="text-cell copyable-cell" data-type="tracking"><div class="clamp-wrapper">${order.trackingCode || ''}</div></td>
             <td class="image-cell" data-type="layout">${order.imageLayout ? `<div class="img-cell-wrap" data-dxf="${order.dxfUrl || ''}"><div class="img-wrapper"><img src="${order.imageLayout}" loading="lazy"><div class="img-actions no-print"><button class="img-btn view-btn" title="Переглянути"><svg viewBox="0 0 16 16"><path d="M2 2v4h1.5V3.5H7V2H2zm12 0h-5v1.5h3.5V7H14V2zM2 14h5v-1.5H3.5V9H2v5zm12 0V9h-1.5v3.5H9V14h5z"></path></svg></button>${currentUser === 'матвій' ? `<button class="img-btn delete-btn" title="Видалити"><svg viewBox="0 0 16 16"><path d="M3.2 4.8h9.6l-.8 8.8c-.1.8-.8 1.6-1.6 1.6H5.6c-.8 0-1.5-.8-1.6-1.6l-.8-8.8zm2.4 8h1.6V6.4H5.6V12.8zm3.2 0h1.6V6.4H8.8V12.8zM4.8 3.2V1.6C4.8.7 5.5 0 6.4 0h3.2c.9 0 1.6.7 1.6 1.6v1.6h3.2v1.6H1.6V3.2h3.2zM6.4 1.6v1.6h3.2V1.6H6.4z"></path></svg></button>` : ''}</div></div><button class="img-dl-btn no-print" title="Завантажити файл проекту" onclick="downloadLayout(this)"><svg viewBox="0 0 16 16"><path d="M8 11.5l-4.5-4.5h3V2h3v5h3L8 11.5zM2 13.5v1h12v-1H2z"/></svg></button></div>` : '<span class="img-placeholder">+ Додати</span>'}</td>`;
@@ -5015,10 +4948,9 @@ window.wbFilterMaterials = function(q) {
     list.style.display = 'block';
     list.innerHTML = filtered.map((m,i) =>
         `<div onclick="wbSelectMaterial(${i},'${(m.NameEng||'').replace(/'/g,"\\'")}','${(m.NameRus||'').replace(/'/g,"\\'")}',${JSON.stringify(m.HarmonizedCode||'')})"
-              style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid #f3f4f6;"
-              class="wbf-autocomplete-item">
-            <div style="font-weight:600;">${m.NameEng||''}</div>
-            <div style="font-size:11px;color:#6b7280;">${m.NameRus||''}</div>
+              class="np-search-item">
+            <div class="np-item-name">${m.NameEng||''}</div>
+            <div class="np-item-desc">${m.NameRus||''}</div>
         </div>`
     ).join('');
 };
@@ -5066,7 +4998,7 @@ window.wbGetRates = async function() {
     const descEn   = wbSafeDesc(g('wb_shipDescEn') || descRu || 'Wooden article').slice(0, 50);
     // Валідація
     if (!city || !zip || !street) {
-        if (result) { result.style.display = 'flex'; result.innerHTML = `<div style="color:#ef4444;padding:10px;background:#fef2f2;border-radius:8px;">⚠️ Заповніть адресу отримувача (крок 1): місто, індекс, вулиця</div>`; }
+        if (result) { result.style.display = 'flex'; result.innerHTML = `<div class="ship-result-error">⚠️ Заповніть адресу отримувача (крок 1): місто, індекс, вулиця</div>`; }
         if (btn) { btn.disabled = false; btn.textContent = '➜ Розрахувати тарифи'; }
         return;
     }
@@ -5128,29 +5060,29 @@ window.wbGetRates = async function() {
             const msg = errRates.length
                 ? errRates.map(r => `${r.ShippingType}: ${r.ErrorMessage}`).join('<br>')
                 : 'Тарифи не знайдені. Відповідь: ' + JSON.stringify(data).slice(0, 300);
-            if (result) { result.style.display = 'flex'; result.innerHTML = `<div style="color:#ef4444;padding:10px;background:#fef2f2;border-radius:8px;">${msg}</div>`; }
+            if (result) { result.style.display = 'flex'; result.innerHTML = `<div class="ship-result-error">${msg}</div>`; }
         } else {
             window._wbRatesList = validRates;
             if (result) {
                 result.style.display = 'flex';
                 result.innerHTML = validRates.map((r, i) => {
                     const carrier = r.ShippingType || 'Carrier';
-                    const service = r.ShippingServiceType ? `<span style="font-size:10px;color:#6b7280;margin-left:4px;">${r.ShippingServiceType}</span>` : '';
+                    const service = r.ShippingServiceType ? `<span class="ship-rate-service">${r.ShippingServiceType}</span>` : '';
                     const price   = parseFloat(r.ShippingCost?.Amount) || 0;
                     const minD    = r.MinDeliveryDays || '?';
                     const maxD    = r.MaxDeliveryDays ? `–${r.MaxDeliveryDays}` : '';
                     return `<div onclick="wbSelectRate(${i})" class="wb-rate-card">
                         <div>
-                            <div style="font-weight:700;font-size:13px;">${carrier}${service}</div>
-                            <div style="font-size:11px;color:#6b7280;">${minD}${maxD} днів</div>
+                            <div class="ship-rate-name">${carrier}${service}</div>
+                            <div class="ship-rate-days">${minD}${maxD} днів</div>
                         </div>
-                        <div style="font-weight:800;font-size:15px;color:#2c9e6e;">$${price.toFixed(2)}</div>
+                        <div class="ship-rate-price">$${price.toFixed(2)}</div>
                     </div>`;
                 }).join('');
             }
         }
     } catch(e) {
-        if (result) { result.style.display = 'flex'; result.innerHTML = `<div style="color:#ef4444;padding:10px;background:#fef2f2;border-radius:8px;">❌ ${e.message}</div>`; }
+        if (result) { result.style.display = 'flex'; result.innerHTML = `<div class="ship-result-error">❌ ${e.message}</div>`; }
     } finally {
         if (btn) { btn.disabled = false; btn.textContent = '➜ Розрахувати тарифи'; }
     }
@@ -5257,11 +5189,11 @@ window.wbCreateShipment = async function() {
             showToast(`✅ Накладна створена! ${trackNum ? 'Трекінг: ' + trackNum : 'ID: ' + shipId}`);
             const summary = document.getElementById('wbSummary');
             if (summary) {
-                summary.innerHTML += `<div style="margin-top:12px;padding:12px;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:8px;">
+                summary.innerHTML += `<div class="ship-summary-box">
                     <div>✅ <b>Накладна створена!</b></div>
                     ${trackNum ? `<div>📦 Трекінг: <b>${trackNum}</b></div>` : `<div>ID: ${shipId}</div>`}
                     ${shipCost ? `<div>💰 Вартість: $${shipCost}</div>` : ''}
-                    ${docsUrl  ? `<div><a href="${docsUrl}" target="_blank" style="color:#16a34a;font-weight:600;">📄 Завантажити документи</a></div>` : ''}
+                    ${docsUrl  ? `<div><a href="${docsUrl}" target="_blank" class="ship-docs-link">📄 Завантажити документи</a></div>` : ''}
                 </div>`;
             }
         } else {
@@ -5413,16 +5345,16 @@ window.wbfGetRates = async function() {
     if (btn) { btn.disabled = true; btn.textContent = 'Розраховуємо...'; }
     if (!wbfValidate()) {
         if (btn) { btn.disabled = false; btn.textContent = 'Розрахувати тарифи'; }
-        wbfShowResult('<div style="padding:14px;color:#ef4444;font-size:13px;background:#fff5f5;border-radius:12px;border:1px solid #fecaca;">Заповніть всі обов\'язкові поля</div>');
+        wbfShowResult('<div class="wbf-result-msg wbf-result-error">Заповніть всі обов\'язкові поля</div>');
         return;
     }
-    wbfShowResult('<div style="padding:14px;color:#9ca3af;font-size:13px;background:#f9f9fb;border-radius:12px;">Завантажуємо тарифи...</div>');
+    wbfShowResult('<div class="wbf-result-msg wbf-result-loading">Завантажуємо тарифи...</div>');
     _wbfRatesList = []; _wbfSelectedRate = null;
     try {
         const body = wbfGetBody();
         const data = await wbRequest('POST', '/api/v1/Shipping/GetRates', { Shipper: body.Shipper, Recipient: body.Recipient, Package: body.Package, PackageItems: body.PackageItems });
         const rates = Array.isArray(data) ? data.filter(r => r.ShippingCost && !r.ErrorMessage) : [];
-        if (!rates.length) { wbfShowResult('<div style="padding:14px;color:#ef4444;font-size:13px;background:#fef2f2;border-radius:12px;">Тарифи не знайдено. Перевірте дані.</div>'); return; }
+        if (!rates.length) { wbfShowResult('<div class="wbf-result-msg wbf-result-error">Тарифи не знайдено. Перевірте дані.</div>'); return; }
         _wbfRatesList = rates;
         const cards = rates.map((r, i) => {
             const price = parseFloat(r.ShippingCost?.Amount||0).toFixed(2);
@@ -5436,12 +5368,12 @@ window.wbfGetRates = async function() {
                 <button class="rc-create-btn" onclick="event.stopPropagation();wbfOnCreateClick(${isNP})">Створити накладну →</button>
             </div>`;
         }).join('');
-        wbfShowResult(`<div style="padding:16px;background:white;border:1px solid #eceef2;border-radius:12px;">
-            <div style="font-size:10px;color:#9ca3af;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">Оберіть варіант доставки</div>
+        wbfShowResult(`<div class="wbf-result-rates">
+            <div class="wbf-result-rates-title">Оберіть варіант доставки</div>
             <div class="wb-rates-grid">${cards}</div>
         </div>`);
     } catch(e) {
-        wbfShowResult(`<div style="padding:14px;color:#ef4444;font-size:13px;background:#fef2f2;border-radius:12px;">Помилка: ${e.message}</div>`);
+        wbfShowResult(`<div class="wbf-result-msg wbf-result-error">Помилка: ${e.message}</div>`);
     } finally {
         if (btn) { btn.disabled = false; btn.textContent = 'Розрахувати тарифи'; }
     }
@@ -5480,13 +5412,13 @@ window.wbfCreateShipment = async function() {
         const shipId   = data.ShipmentId||'';
         const docsUrl  = data.DocumentsUrl||'';
         const pdfBtn = shipId ? `<button onclick="wbfDownloadPDF('${shipId}',this)" title="Завантажити PDF" class="wbf-pdf-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="wbf-pdf-label">PDF</span></button>` : (docsUrl?`<a href="${docsUrl}" target="_blank" class="wbf-doc-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="wbf-pdf-label">PDF</span></a>`:'');
-        wbfShowResult(`<div style="padding:20px;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
-            <div><div style="font-size:14px;font-weight:700;color:#16a34a;margin-bottom:8px;">Накладну створено!</div>
-            ${trackNum?`<div style="font-size:13px;color:#374151;margin-bottom:4px;">Трекінг: <b>${trackNum}</b></div>`:''}
-            ${cost?`<div style="font-size:13px;color:#6b7280;">Вартість: <b style="color:#374151;">$${cost}</b></div>`:''}</div>
-            <div style="flex-shrink:0;">${pdfBtn}</div></div>`);
+        wbfShowResult(`<div class="ship-success-box">
+            <div><div class="ship-success-title">Накладну створено!</div>
+            ${trackNum?`<div class="ship-success-track">Трекінг: <b>${trackNum}</b></div>`:''}
+            ${cost?`<div class="ship-success-cost">Вартість: <b>$${cost}</b></div>`:''}</div>
+            <div class="ship-success-pdf">${pdfBtn}</div></div>`);
     } catch(e) {
-        wbfShowResult(`<div style="padding:14px;color:#ef4444;font-size:13px;background:#fef2f2;border-radius:12px;">Помилка: ${e.message}</div>`);
+        wbfShowResult(`<div class="wbf-result-msg wbf-result-error">Помилка: ${e.message}</div>`);
     } finally {
         document.querySelectorAll('.rc-create-btn').forEach(b => { b.disabled=false; b.textContent='Створити накладну →'; });
     }
@@ -5517,7 +5449,7 @@ window.wbNpModalOpen = async function() {
     const confirmBtn = document.getElementById('wbNpConfirmBtn');
     const city = document.getElementById('wbf_npCity')?.value || 'Рівне';
     modal.style.display = 'flex';
-    if (list) list.innerHTML = '<div style="padding:20px;text-align:center;color:#9ca3af;font-size:13px;">Завантаження...</div>';
+    if (list) list.innerHTML = '<div class="placeholder-loading">Завантаження...</div>';
     if (sub) sub.textContent = `${city} — завантаження...`;
     if (confirmBtn) confirmBtn.disabled = true;
     _wbNpSelected = null;
@@ -5541,13 +5473,13 @@ window.wbNpModalOpen = async function() {
             setTimeout(() => { const el = document.querySelector(`[data-ref="${def.ref}"]`); if (el) { el.classList.add('sel'); el.scrollIntoView({ block:'center', behavior:'smooth' }); } }, 100);
         }
     } catch(e) {
-        if (list) list.innerHTML = `<div style="padding:20px;text-align:center;color:#ef4444;font-size:13px;">Помилка: ${e.message}</div>`;
+        if (list) list.innerHTML = `<div class="placeholder-error">Помилка: ${e.message}</div>`;
     }
 };
 function wbNpRenderList(branches) {
     const list = document.getElementById('wbNpList');
     if (!list) return;
-    if (!branches.length) { list.innerHTML = '<div style="padding:20px;text-align:center;color:#9ca3af;font-size:13px;">Нічого не знайдено</div>'; return; }
+    if (!branches.length) { list.innerHTML = '<div class="placeholder-loading">Нічого не знайдено</div>'; return; }
     list.innerHTML = branches.map(b => {
         const sl = b.label.replace(/"/g,'&quot;').replace(/'/g,'&#39;');
         return `<div class="wb-np-item${_wbNpSelected?.ref===b.ref?' sel':''}" data-ref="${b.ref}" data-label="${sl}" onclick="wbNpSelectItem(this)">${b.label}</div>`;
