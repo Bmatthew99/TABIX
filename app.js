@@ -794,7 +794,7 @@ window.loadMoreOrders = function() {
     displayLimit += 20; // Увеличиваем лимит
     applyFilters();     // Перерисовываем таблицу
 };
-const imageInput = document.createElement('input'); imageInput.type = 'file'; imageInput.accept = 'image/*'; imageInput.style.display = 'none'; document.body.appendChild(imageInput);
+const imageInput = document.createElement('input'); imageInput.type = 'file'; imageInput.accept = 'image/*'; imageInput.className = 'file-input-hidden'; document.body.appendChild(imageInput);
 imageInput.addEventListener('change', function(e) {
     const file = e.target.files[0]; if (!file) return; const reader = new FileReader();
     reader.onload = function(event) {
@@ -1013,12 +1013,12 @@ tbody.addEventListener('click', (e) => {
             const currentVal = td.dataset.val || td.innerText.trim();
             cellInput.value = currentVal;
             cellInput.rows = 6;
-            cellInput.style.width = '260px';
-            cellInput.style.fontSize = '12px';
-            cellInput.style.lineHeight = '1.7';
-            cellInput.style.padding = '10px 12px';
-            textInputPopover.style.width = '280px';
-            textInputPopover.style.padding = '6px';
+            cellInput.classList.add('cell-input-recipient');
+            
+            
+            
+            textInputPopover.classList.add('text-input-popover--recipient');
+            
             const rect = td.getBoundingClientRect();
             window.smartPosition(textInputPopover, rect, 'side');
             cellInput.focus();
@@ -2050,7 +2050,7 @@ window.applyMaterialWarningsToRow = function(row) {
     if (basicWarnings.length) {
         const checkCell = row.querySelector('.cell-checkbox');
         if (!checkCell) return;
-        checkCell.style.position = 'relative';
+        checkCell.classList.add('cell-relative');
         const wrap = document.createElement('div');
         wrap.className = 'mat-warn-left';
         // JS hover: додаємо клас до <tr> щоб скасувати ховер через CSS
@@ -2208,7 +2208,7 @@ function renderMaterialsTable() {
         delay += 25; 
     });
     html += `</div>
-        <div class="f-add-inline f-paint-add-btn ignore-drag" onclick="window.openAddColorModal()" title="Додати новий колір" style="display:inline-flex;align-items:center;justify-content:center;width:72px;height:72px;border-radius:50%;margin-top:0;cursor:pointer;border:2px dashed #e5e7eb;color:#9ca3af;transition:0.2s;flex-shrink:0;" onmouseover="this.style.borderColor='#111827';this.style.color='#111827'" onmouseout="this.style.borderColor='#e5e7eb';this.style.color='#9ca3af'">
+        <div class="f-add-inline f-paint-add-btn ignore-drag" onclick="window.openAddColorModal()" title="Додати новий колір" >
             <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
         </div>
     
@@ -2805,8 +2805,8 @@ if (!document.getElementById('quickAddModal')) {
             <input type="number" id="qaAmount" class="mac-input" placeholder="+ Введіть кількість" style="text-align: center; font-size: 18px; font-weight: 600; padding: 16px; width: 100%; box-sizing: border-box; background: #f9f9fb; border: 1px solid #e5e7eb; border-radius: 12px; margin-bottom: 20px; outline: none;" onkeydown="if(event.key==='Enter') saveQuickAdd()">
             
             <div style="display: flex; gap: 10px; justify-content: center;">
-                <button style="flex: 1; background: white; color: #111827; border: 1px solid #e5e7eb; padding: 12px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f9f9fb'" onmouseout="this.style.background='white'" onclick="closeQuickAdd()">Скасувати</button>
-                <button style="flex: 1; background: #111827; color: white; border: none; padding: 12px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#374151'" onmouseout="this.style.background='#111827'" onclick="saveQuickAdd()">Додати</button>
+                <button class="qa-btn-cancel" onclick="closeQuickAdd()">Скасувати</button>
+                <button class="qa-btn-save" onclick="saveQuickAdd()">Додати</button>
             </div>
         </div>
     </div>`;
@@ -3032,8 +3032,7 @@ window.renderProductsDashboard = function() {
             `<span style="font-size:10px;font-weight:700;color:#6B7280;background:#f3f4f6;padding:2px 8px;border-radius:6px;">${s}</span>`
         ).join('');
         html += `<div style="position:relative;background:white;border:1.5px solid #f3f4f6;border-radius:16px;padding:20px;cursor:pointer;transition:all 0.18s;display:flex;flex-direction:column;gap:12px;"
-            onmouseover="this.style.borderColor='#374151';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.07)';this.querySelector('.prod-settings-btn').style.opacity='1'"
-            onmouseout="this.style.borderColor='#f3f4f6';this.style.boxShadow='none';this.querySelector('.prod-settings-btn').style.opacity='0'"
+            
             onclick="window.openProductRecipeModal('${prod.replace(/'/g,"\\'")}')">
             <button class="prod-settings-btn" onclick="event.stopPropagation();window.openAddProductModal('${prod.replace(/'/g,"\\'")}');"
                 style="position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:8px;border:1.5px solid #e5e7eb;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:0.15s;padding:0;" title="Налаштування товару">
@@ -3048,11 +3047,9 @@ window.renderProductsDashboard = function() {
         </div>`;
     });
     html += `
-        <div onclick="window.openAddProductModal()" style="background:transparent;border:1.5px dashed #e5e7eb;border-radius:16px;padding:20px;cursor:pointer;transition:all 0.18s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:100px;color:#9ca3af;"
-            onmouseover="this.style.borderColor='#111827';this.style.color='#111827';this.style.background='rgba(17,24,39,0.02)'"
-            onmouseout="this.style.borderColor='#e5e7eb';this.style.color='#9ca3af';this.style.background='transparent'">
+        <div onclick="window.openAddProductModal()" class="prod-add-card" style="background:transparent;border:1.5px dashed #e5e7eb;border-radius:16px;padding:20px;cursor:pointer;transition:all 0.18s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:100px;color:#9ca3af;">
             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            <span style="font-size:12px;font-weight:600;">Новий товар</span>
+            <span >Новий товар</span>
         </div>
     </div>`;
     container.innerHTML = html;
@@ -3096,19 +3093,19 @@ window.openAddProductModal = function(editProdName) {
     // Overlay
     const overlay = document.createElement('div');
     overlay.id = '_addProductModal';
-    Object.assign(overlay.style, { position:'fixed', inset:'0', background:'rgba(0,0,0,0.4)', zIndex:'9999', display:'flex', alignItems:'center', justifyContent:'center' });
+    overlay.className = 'prod-modal-overlay';
     // Card
     const card = document.createElement('div');
-    Object.assign(card.style, { background:'white', borderRadius:'20px', padding:'28px', width:'460px', maxWidth:'96vw', boxShadow:'0 20px 60px rgba(0,0,0,0.15)' });
+    card.className = 'prod-modal-card';
     card.addEventListener('click', e => e.stopPropagation());
     // Title
     const title = document.createElement('div');
-    title.style.cssText = 'font-size:16px;font-weight:800;color:#111827;margin-bottom:20px;';
+    title.className = 'prod-modal-title';
     title.textContent = isEdit ? 'Налаштування товару' : 'Новий товар';
     card.appendChild(title);
     // Name input
     const nameLabel = document.createElement('label');
-    nameLabel.style.cssText = 'font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:8px;';
+    nameLabel.className = 'prod-modal-label';
     nameLabel.textContent = 'Назва товару';
     card.appendChild(nameLabel);
     const nameInput = document.createElement('input');
@@ -3116,76 +3113,74 @@ window.openAddProductModal = function(editProdName) {
     nameInput.type = 'text';
     nameInput.value = isEdit ? editProdName : '';
     nameInput.placeholder = 'Наприклад: Копілка тройна';
-    nameInput.style.cssText = 'width:100%;box-sizing:border-box;padding:11px 14px;border:1.5px solid #e5e7eb;border-radius:12px;font-size:14px;font-weight:600;outline:none;font-family:inherit;margin-bottom:18px;' + (isEdit ? 'background:#f9f9fb;' : '');
+    nameInput.className = 'prod-modal-input' + (isEdit ? ' prod-modal-input--edit' : '');
     if (isEdit) nameInput.readOnly = true;
-    nameInput.onfocus = () => nameInput.style.borderColor = '#111827';
-    nameInput.onblur  = () => nameInput.style.borderColor = '#e5e7eb';
+    
+    
     card.appendChild(nameInput);
     // Sizes
     const sizesLabel = document.createElement('label');
-    sizesLabel.style.cssText = 'font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:8px;';
+    sizesLabel.className = 'prod-modal-label';
     sizesLabel.textContent = 'Розміри';
     card.appendChild(sizesLabel);
     const sizesRow = document.createElement('div');
-    sizesRow.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;';
+    sizesRow.className = 'prod-sizes-row';
     allSizes.forEach(s => {
         const btn = document.createElement('button');
         btn.textContent = s;
-        btn.style.cssText = `padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid ${window._newProdSizes.includes(s)?'#111827':'#e5e7eb'};background:${window._newProdSizes.includes(s)?'#111827':'white'};color:${window._newProdSizes.includes(s)?'white':'#6B7280'};transition:0.12s;font-family:inherit;`;
+        btn.className = 'prod-size-btn' + (window._newProdSizes.includes(s) ? ' active' : '');
         btn.onclick = () => {
             const idx = window._newProdSizes.indexOf(s);
             if (idx === -1) window._newProdSizes.push(s); else window._newProdSizes.splice(idx, 1);
             const active = window._newProdSizes.includes(s);
-            btn.style.background = active ? '#111827' : 'white';
-            btn.style.color = active ? 'white' : '#6B7280';
-            btn.style.borderColor = active ? '#111827' : '#e5e7eb';
+            btn.classList.toggle('active', active);
         };
         sizesRow.appendChild(btn);
     });
     card.appendChild(sizesRow);
     // Colors
     const colorsLabel = document.createElement('label');
-    colorsLabel.style.cssText = 'font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:8px;';
+    colorsLabel.className = 'prod-modal-label';
     colorsLabel.textContent = 'Кольори';
     card.appendChild(colorsLabel);
     const colorsRow = document.createElement('div');
-    colorsRow.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;';
+    colorsRow.className = 'prod-colors-row';
     allAvailColors.forEach(c => {
         const dot = document.createElement('div');
         dot.title = c.name;
         const isActive = window._newProdColors.includes(c.name);
-        dot.style.cssText = `width:28px;height:28px;border-radius:50%;background:${c.hex};border:3px solid ${isActive?'#111827':'rgba(0,0,0,0.1)'};cursor:pointer;transition:0.12s;flex-shrink:0;`;
-        dot.onmouseover = () => dot.style.transform = 'scale(1.15)';
-        dot.onmouseout  = () => dot.style.transform = 'scale(1)';
+        dot.className = 'prod-color-dot' + (isActive ? ' active' : ''); dot.style.background = c.hex;
+        
+        
         dot.onclick = () => {
             const idx = window._newProdColors.indexOf(c.name);
             if (idx === -1) window._newProdColors.push(c.name); else window._newProdColors.splice(idx, 1);
-            dot.style.borderColor = window._newProdColors.includes(c.name) ? '#111827' : 'rgba(0,0,0,0.1)';
+            dot.classList.toggle('active', window._newProdColors.includes(c.name));
         };
         colorsRow.appendChild(dot);
     });
     card.appendChild(colorsRow);
     // Buttons row
     const btnsRow = document.createElement('div');
-    btnsRow.style.cssText = 'display:flex;gap:10px;justify-content:space-between;align-items:center;';
+    btnsRow.className = 'prod-modal-footer';
     const leftSide = document.createElement('div');
     if (isEdit) {
         const delBtn = document.createElement('button');
         delBtn.textContent = '🗑 Видалити';
-        delBtn.style.cssText = 'padding:10px 16px;border-radius:10px;border:1.5px solid #fee2e2;background:#fff5f5;color:#dc2626;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;';
+        delBtn.className = 'prod-btn-delete';
         delBtn.onclick = () => window._deleteProduct(editProdName);
         leftSide.appendChild(delBtn);
     }
     btnsRow.appendChild(leftSide);
     const rightSide = document.createElement('div');
-    rightSide.style.cssText = 'display:flex;gap:8px;';
+    rightSide.className = 'prod-modal-footer-right';
     const cancelBtn = document.createElement('button');
     cancelBtn.textContent = 'Скасувати';
-    cancelBtn.style.cssText = 'padding:10px 18px;border-radius:10px;border:1.5px solid #e5e7eb;background:white;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;';
+    cancelBtn.className = 'prod-btn-cancel';
     cancelBtn.onclick = () => overlay.remove();
     const saveBtn = document.createElement('button');
     saveBtn.textContent = 'Зберегти';
-    saveBtn.style.cssText = 'padding:10px 20px;border-radius:10px;border:none;background:#111827;color:white;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;';
+    saveBtn.className = 'prod-btn-save';
     saveBtn.onclick = () => window._saveNewProduct(isEdit ? editProdName : '');
     rightSide.appendChild(cancelBtn);
     rightSide.appendChild(saveBtn);
@@ -3236,7 +3231,7 @@ window.openAddColorModal = function() {
     if (existing) existing.remove();
     const modal = document.createElement('div');
     modal.id = '_addColorModal';
-    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;display:flex;align-items:center;justify-content:center;';
+    modal.className = 'color-modal-overlay';
     modal.innerHTML = `
         <div style="background:white;border-radius:20px;padding:28px;width:380px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,0.15);" onclick="event.stopPropagation()">
             <div style="font-size:16px;font-weight:800;color:#111827;margin-bottom:18px;">Новий колір фарби</div>
@@ -3482,7 +3477,7 @@ window.renderFinancesDashboard = function() {
             return `<div style="border-bottom:1px solid #f9f9fb;">
                 <div style="display:flex;align-items:center;padding:12px 16px;gap:12px;cursor:pointer;transition:background 0.1s;"
                     onclick="window._finExpanded['${expKey}']=!window._finExpanded['${expKey}'];window.renderFinancesDashboard();"
-                    onmouseover="this.style.background='#f9f9fb'" onmouseout="this.style.background='${isExpanded ? '#fafafa' : 'transparent'}'">
+                    class="fin-row-hover"">
                     <div style="font-size:11px;color:#9ca3af;font-weight:500;min-width:36px;">${r.dateStr || '—'}</div>
                     <div style="flex:1;min-width:0;">
                         <div style="font-size:13px;font-weight:700;color:#111827;">${r.prod}</div>
@@ -3506,7 +3501,7 @@ window.renderFinancesDashboard = function() {
                     <div style="margin-left:4px;color:#9ca3af;transition:transform 0.2s;transform:rotate(${isExpanded ? '180' : '0'}deg);">
                         <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </div>
-                    ${r.orderId ? `<div onclick="event.stopPropagation();if(confirm('Прибрати цей запис з фінансів?')){const domRow=document.querySelector('tr[data-order-id=\\'${r.orderId}\\']');if(domRow)domRow.dataset.hiddenFromFinances='true';window.renderFinancesDashboard();db.collection('orders').doc('${r.orderId}').update({hiddenFromFinances:true})}" style="margin-left:4px;color:#d1d5db;cursor:pointer;padding:4px;border-radius:4px;transition:0.15s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#d1d5db'" title="Прибрати з фінансів">
+                    ${r.orderId ? `<div onclick="event.stopPropagation();if(confirm('Прибрати цей запис з фінансів?')){const domRow=document.querySelector('tr[data-order-id=\\'${r.orderId}\\']');if(domRow)domRow.dataset.hiddenFromFinances='true';window.renderFinancesDashboard();db.collection('orders').doc('${r.orderId}').update({hiddenFromFinances:true})}" class="fin-delete-icon" title="Прибрати з фінансів">
                         <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M3.2 4.8h9.6l-.8 8.8c-.1.8-.8 1.6-1.6 1.6H5.6c-.8 0-1.5-.8-1.6-1.6l-.8-8.8zm2.4 8h1.6V6.4H5.6V12.8zm3.2 0h1.6V6.4H8.8V12.8zM4.8 3.2V1.6C4.8.7 5.5 0 6.4 0h3.2c.9 0 1.6.7 1.6 1.6v1.6h3.2v1.6H1.6V3.2h3.2zM6.4 1.6v1.6h3.2V1.6H6.4z"/></svg>
                     </div>` : ''}
                 </div>
@@ -3531,7 +3526,7 @@ window.renderFinancesDashboard = function() {
             ${allProds.length  > 1 ? makeSelect(allProds,  '_finFilterProd',  'Товар')  : ''}
             ${allSizes.length  > 1 ? makeSelect(allSizes,  '_finFilterSize',  'Розмір') : ''}
             ${allColors.length > 1 ? makeSelect(allColors, '_finFilterColor', 'Колір')  : ''}
-            ${hasFilters ? `<button onclick="window._finFilterProd='';window._finFilterSize='';window._finFilterColor='';window.renderFinancesDashboard();" style="padding:6px 10px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #e5e7eb;background:transparent;color:#9ca3af;transition:0.15s;font-family:inherit;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#9ca3af'">✕ Скинути</button>` : ''}
+            ${hasFilters ? `<button onclick="window._finFilterProd='';window._finFilterSize='';window._finFilterColor='';window.renderFinancesDashboard();" class="fin-reset-btn">✕ Скинути</button>` : ''}
         </div>` : '';
     container.innerHTML = `
         <div style="padding:0 0 20px 0;">
@@ -3539,8 +3534,8 @@ window.renderFinancesDashboard = function() {
                 <h2 style="margin:0;font-size:18px;font-weight:800;color:#111827;">Фінансова аналітика</h2>
                 <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                     <div style="display:flex;gap:6px;flex-wrap:wrap;">${periodBtns}</div>
-                    <button onclick="window.resetFinancesView()" style="padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #e5e7eb;background:#f9f9fb;color:#6B7280;transition:0.15s;font-family:inherit;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='#f9f9fb'" title="Скинути фільтри та вигляд">↺ Скинути</button>
-                    <button onclick="window.resetAllPriceData()" style="padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #fee2e2;background:#fff5f5;color:#dc2626;transition:0.15s;font-family:inherit;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='#fff5f5'" title="Очистити всі збережені ціни і доставку з замовлень">🗑 Очистити ціни</button>
+                    <button onclick="window.resetFinancesView()" class="fin-action-btn" title="Скинути фільтри та вигляд">↺ Скинути</button>
+                    <button onclick="window.resetAllPriceData()" class="fin-clear-btn" title="Очистити всі збережені ціни і доставку з замовлень">🗑 Очистити ціни</button>
                 </div>
             </div>
             ${customDateHtml}
@@ -3667,8 +3662,7 @@ window.renderRecipeCards = function() {
                 border-radius:14px; padding:16px 18px; cursor:pointer;
                 transition:all 0.18s; display:flex; flex-direction:column; gap:10px;
                 box-shadow:${isSelected ? '0 4px 16px rgba(99,102,241,0.12)' : 'none'};
-            " onmouseover="if(!${isSelected}){this.style.borderColor='#6366f1';this.style.boxShadow='0 4px 16px rgba(99,102,241,0.1)';}"
-               onmouseout="if(!${isSelected}){this.style.borderColor='${hasRecipe ? '#e5e7eb' : '#f3f4f6'}';this.style.boxShadow='none';}">
+            ">
                 <div style="display:flex;align-items:center;gap:8px;">
                     ${dot}
                     <span style="font-size:14px;font-weight:700;color:#111827;">${color}</span>
@@ -3887,7 +3881,7 @@ window.renderRecipeRulesList = function() {
             ruleTotalCost += itemCost;
             let tagHtml = `
             <div style="background:white;border:1px solid #e5e7eb;border-radius:16px;padding:12px;width:140px;display:flex;flex-direction:column;position:relative;">
-                <svg viewBox="0 0 16 16" style="position:absolute;top:12px;right:12px;width:14px;height:14px;fill:#9ca3af;cursor:pointer;transition:0.2s;" onmouseover="this.style.fill='#ef4444'" onmouseout="this.style.fill='#9ca3af'" onclick="event.stopPropagation();removeRecipeMat(${ruleIndex},'${mat.name.replace(/'/g,"\\'")}')"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
+                <svg viewBox="0 0 16 16" class="recipe-remove-icon" onclick="event.stopPropagation();removeRecipeMat(${ruleIndex},'${mat.name.replace(/'/g,"\\'")}')"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
                 <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding-right:16px;">${iconHtml}<span style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;font-weight:600;">${mat.name}</span></div>
                 <div style="display:flex;align-items:baseline;gap:6px;">
                     <input type="number" value="${amt}" placeholder="0" style="width:60px;padding:2px 0;border:none;border-bottom:2px solid #e5e7eb;font-size:16px;font-weight:700;outline:none;text-align:center;background:transparent;" onchange="updateRecipeMatAmount(${ruleIndex},'${mat.name.replace(/'/g,"\\'")}',this.value);window.renderRecipeRulesList();">
@@ -3916,7 +3910,7 @@ window.renderRecipeRulesList = function() {
             <div style="font-size:11px;color:#9ca3af;font-weight:700;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;">Фарба</div>
             <div style="display:flex;flex-wrap:wrap;gap:12px;">
                 ${activeColorsHtml}
-                ${inactiveColorsHtml ? `<div class="custom-dropdown" tabindex="0" onblur="this.classList.remove('open')" onclick="this.classList.toggle('open')" style="border:none!important;background:transparent!important;box-shadow:none!important;padding:0;min-width:auto;"><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:140px;min-height:100px;border:2px dashed #e5e7eb;border-radius:16px;color:#9ca3af;cursor:pointer;" onmouseover="this.style.borderColor='#111827';this.style.color='#111827'" onmouseout="this.style.borderColor='#e5e7eb';this.style.color='#9ca3af'"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" style="margin-bottom:8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg><span style="font-size:12px;font-weight:600;">Додати колір</span></div><div class="dropdown-list" style="min-width:200px;left:0;top:100%;max-height:250px;z-index:100;">${inactiveColorsHtml}</div></div>` : ''}
+                ${inactiveColorsHtml ? `<div class="custom-dropdown" tabindex="0" onblur="this.classList.remove('open')" onclick="this.classList.toggle('open')" class="recipe-add-dropdown"><div class="recipe-add-placeholder"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" ><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg><span >Додати колір</span></div><div class="dropdown-list" class="recipe-dropdown-list">${inactiveColorsHtml}</div></div>` : ''}
             </div>
         </div>
         <div style="height:1px;background:#e5e7eb;margin:0 -24px 24px -24px;"></div>
@@ -3924,7 +3918,7 @@ window.renderRecipeRulesList = function() {
             <div style="font-size:11px;color:#9ca3af;font-weight:700;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;">Основні матеріали</div>
             <div style="display:flex;flex-wrap:wrap;gap:12px;">
                 ${activeBasicsHtml}
-                ${inactiveBasicsHtml ? `<div class="custom-dropdown" tabindex="0" onblur="this.classList.remove('open')" onclick="this.classList.toggle('open')" style="border:none!important;background:transparent!important;box-shadow:none!important;padding:0;min-width:auto;"><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:140px;min-height:100px;border:2px dashed #e5e7eb;border-radius:16px;color:#9ca3af;cursor:pointer;" onmouseover="this.style.borderColor='#111827';this.style.color='#111827'" onmouseout="this.style.borderColor='#e5e7eb';this.style.color='#9ca3af'"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" style="margin-bottom:8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg><span style="font-size:12px;font-weight:600;">Додати матеріал</span></div><div class="dropdown-list" style="min-width:200px;left:0;top:100%;max-height:250px;z-index:100;">${inactiveBasicsHtml}</div></div>` : ''}
+                ${inactiveBasicsHtml ? `<div class="custom-dropdown" tabindex="0" onblur="this.classList.remove('open')" onclick="this.classList.toggle('open')" class="recipe-add-dropdown"><div class="recipe-add-placeholder"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" ><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg><span >Додати матеріал</span></div><div class="dropdown-list" class="recipe-dropdown-list">${inactiveBasicsHtml}</div></div>` : ''}
             </div>
         </div>
     `;
@@ -3965,7 +3959,7 @@ window.renderRecipeContent = function() {
             let matPrice = parseFloat(materialsData.find(m=>m.name===mat.name)?.price)||0;
             ruleTotalCost += (parseFloat(amt)||0) * matPrice;
             let card = `<div style="background:white;border:1px solid #e5e7eb;border-radius:14px;padding:12px;width:130px;display:flex;flex-direction:column;position:relative;">
-                <svg viewBox="0 0 16 16" style="position:absolute;top:10px;right:10px;width:13px;height:13px;fill:#d1d5db;cursor:pointer;" onmouseover="this.style.fill='#ef4444'" onmouseout="this.style.fill='#d1d5db'" onclick="event.stopPropagation();removeRecipeMat(${ruleIndex},'${mat.name.replace(/'/g,"\\'")}')"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
+                <svg viewBox="0 0 16 16" class="recipe-remove-icon--sm" onclick="event.stopPropagation();removeRecipeMat(${ruleIndex},'${mat.name.replace(/'/g,"\\'")}')"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
                 <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px;padding-right:14px;">${iconHtml}<span style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;font-weight:600;color:#374151;">${mat.name}</span></div>
                 <div style="display:flex;align-items:baseline;gap:5px;">
                     <input type="number" value="${amt}" placeholder="0" style="width:55px;padding:2px 0;border:none;border-bottom:1.5px solid #e5e7eb;font-size:15px;font-weight:700;outline:none;text-align:center;background:transparent;color:#111827;" onchange="updateRecipeMatAmount(${ruleIndex},'${mat.name.replace(/'/g,"\\'")}',this.value);window.renderRecipeContent();window.calcDetailProfit();">
@@ -3982,17 +3976,17 @@ window.renderRecipeContent = function() {
         document.getElementById('detailCostBadge').innerText = `Собівартість: ${ruleTotalCost.toFixed(2)} ₴`;
         window.calcDetailProfit();
     }
-    const addBtn = (label, inactive) => inactive ? `<div class="custom-dropdown" tabindex="0" onblur="this.classList.remove('open')" onclick="this.classList.toggle('open')" style="border:none!important;background:transparent!important;box-shadow:none!important;padding:0;"><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:130px;min-height:90px;border:1.5px dashed #e5e7eb;border-radius:14px;color:#d1d5db;cursor:pointer;transition:0.15s;" onmouseover="this.style.borderColor='#374151';this.style.color='#374151'" onmouseout="this.style.borderColor='#e5e7eb';this.style.color='#d1d5db'"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" style="margin-bottom:6px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg><span style="font-size:11px;font-weight:600;">${label}</span></div><div class="dropdown-list" style="min-width:190px;left:0;top:100%;max-height:220px;z-index:100;">${inactive}</div></div>` : '';
+    const addBtn = (label, inactive) => inactive ? `<div class="custom-dropdown" tabindex="0" onblur="this.classList.remove('open')" onclick="this.classList.toggle('open')" class="recipe-add-dropdown--sm"><div class="recipe-add-placeholder--sm"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" ><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg><span >${label}</span></div><div class="dropdown-list" class="recipe-dropdown-list--sm">${inactive}</div></div>` : '';
     container.innerHTML = `
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
             <div style="display:flex;align-items:center;gap:10px;">
                 <span style="font-size:13px;font-weight:700;color:#374151;">Матеріали</span>
-                <button onclick="window.openCopyRecipePopover(this)" style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid #e5e7eb;background:white;color:#6b7280;transition:0.15s;font-family:inherit;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='white'">
+                <button onclick="window.openCopyRecipePopover(this)" class="recipe-copy-btn">
                     <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                     Скопіювати рецепт
                 </button>
             </div>
-            <button style="color:#ef4444;background:transparent;border:none;font-size:12px;font-weight:600;cursor:pointer;padding:4px 8px;border-radius:6px;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='transparent'" onclick="window.deleteSpecificRecipe(${ruleIndex})">Видалити рецепт</button>
+            <button class="recipe-delete-btn" onclick="window.deleteSpecificRecipe(${ruleIndex})">Видалити рецепт</button>
         </div>
         <div id="copyRecipePopover" style="display:none;position:relative;z-index:50;margin-bottom:14px;"></div>
         <div style="margin-bottom:20px;">
@@ -4040,7 +4034,7 @@ window.openCopyRecipePopover = function(btn) {
         const cs = o.color.replace(/'/g, "\\'");
         return `<div onclick="window.copyRecipeFrom('${ps}','${o.size}','${cs}');document.getElementById('copyRecipePopover').style.display='none';"
             style="padding:9px 14px;font-size:12px;font-weight:500;color:#111827;cursor:pointer;border-radius:8px;transition:0.12s;"
-            onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='transparent'">
+            class="copy-recipe-item">
             ${o.label}
         </div>`;
     }).join('');
@@ -4766,7 +4760,7 @@ function initDragAndDrop() {
     if (currentUser !== 'матвій') return;
     let dragSrc = null;
     const dragIndicator = document.createElement('div');
-    dragIndicator.style.cssText = 'position:fixed;height:2px;background:#2383e2;border-radius:2px;pointer-events:none;z-index:99999;display:none;box-shadow:0 0 6px rgba(35,131,226,0.5);';
+    dragIndicator.className = 'drag-indicator';
     document.body.appendChild(dragIndicator);
     function addHandleToRow(row) {
         if (row.querySelector('.drag-handle')) return;
@@ -5022,7 +5016,7 @@ window.wbFilterMaterials = function(q) {
     list.innerHTML = filtered.map((m,i) =>
         `<div onclick="wbSelectMaterial(${i},'${(m.NameEng||'').replace(/'/g,"\\'")}','${(m.NameRus||'').replace(/'/g,"\\'")}',${JSON.stringify(m.HarmonizedCode||'')})"
               style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid #f3f4f6;"
-              onmouseover="this.style.background='#f5f3ff'" onmouseout="this.style.background=''">
+              class="wbf-autocomplete-item">
             <div style="font-weight:600;">${m.NameEng||''}</div>
             <div style="font-size:11px;color:#6b7280;">${m.NameRus||''}</div>
         </div>`
@@ -5485,7 +5479,7 @@ window.wbfCreateShipment = async function() {
         const cost     = data.ShippingCost?.Amount||'';
         const shipId   = data.ShipmentId||'';
         const docsUrl  = data.DocumentsUrl||'';
-        const pdfBtn = shipId ? `<button onclick="wbfDownloadPDF('${shipId}',this)" title="Завантажити PDF" style="display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:56px;height:56px;background:#fff;border:1.5px solid #e5e7eb;border-radius:10px;cursor:pointer;gap:2px;padding:0;" onmouseover="this.style.borderColor='#111827'" onmouseout="this.style.borderColor='#e5e7eb'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span style="font-size:9px;font-weight:700;color:#ef4444;">PDF</span></button>` : (docsUrl?`<a href="${docsUrl}" target="_blank" style="display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:56px;height:56px;background:#fff;border:1.5px solid #e5e7eb;border-radius:10px;text-decoration:none;gap:2px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span style="font-size:9px;font-weight:700;color:#ef4444;">PDF</span></a>`:'');
+        const pdfBtn = shipId ? `<button onclick="wbfDownloadPDF('${shipId}',this)" title="Завантажити PDF" class="wbf-pdf-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="wbf-pdf-label">PDF</span></button>` : (docsUrl?`<a href="${docsUrl}" target="_blank" class="wbf-doc-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="wbf-pdf-label">PDF</span></a>`:'');
         wbfShowResult(`<div style="padding:20px;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
             <div><div style="font-size:14px;font-weight:700;color:#16a34a;margin-bottom:8px;">Накладну створено!</div>
             ${trackNum?`<div style="font-size:13px;color:#374151;margin-bottom:4px;">Трекінг: <b>${trackNum}</b></div>`:''}
@@ -5579,7 +5573,7 @@ window.wbNpConfirm = function() {
         if (!npLabel) {
             npLabel = document.createElement('div');
             npLabel.className = 'rc-np-label';
-            npLabel.style.cssText = 'font-size:10px;color:#16a34a;margin-top:6px;padding:5px 8px;background:rgba(22,163,74,0.08);border-radius:6px;word-break:break-word;line-height:1.4;';
+            npLabel.className = 'np-branch-label';
             const cb = rateCard.querySelector('.rc-create-btn');
             if (cb) cb.before(npLabel); else rateCard.appendChild(npLabel);
         }
