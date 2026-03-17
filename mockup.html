@@ -14,7 +14,7 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background: #f5f5f7;
+      background: #F5F5F5;
       color: #333;
       min-height: 100vh;
       display: flex;
@@ -22,41 +22,48 @@
 
     /* ===== SIDEBAR ===== */
     .sidebar {
-      width: 210px;
+      width: 280px;
       min-height: 100vh;
       background: #fff;
-      border-right: 1px solid #eee;
       display: flex;
       flex-direction: column;
-      padding: 24px 0;
+      padding: 28px 0;
       flex-shrink: 0;
+      border-right: 1px solid #f0f0f0;
     }
 
     .sidebar-logo {
-      padding: 0 24px;
-      margin-bottom: 36px;
-      font-size: 22px;
+      padding: 0 32px;
+      margin-bottom: 40px;
+      font-size: 28px;
       font-weight: 700;
+    }
+
+    .sidebar-logo .logo-b {
+      color: #1a1a1a;
+    }
+
+    .sidebar-logo .logo-team {
       color: #7c3aed;
-      letter-spacing: -0.5px;
     }
 
     .sidebar-nav {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
+      padding: 0 16px;
     }
 
     .nav-item {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 11px 24px;
-      font-size: 15px;
-      color: #555;
+      gap: 16px;
+      padding: 14px 20px;
+      font-size: 18px;
+      font-weight: 400;
+      color: #666;
       text-decoration: none;
-      border-radius: 0 24px 24px 0;
-      margin-right: 16px;
+      border-radius: 14px;
       cursor: pointer;
       transition: background 0.15s;
       position: relative;
@@ -69,6 +76,7 @@
     .nav-item.active {
       background: #7c3aed;
       color: #fff;
+      font-weight: 500;
     }
 
     .nav-item.active .nav-icon svg {
@@ -76,8 +84,8 @@
     }
 
     .nav-icon {
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -85,8 +93,8 @@
     }
 
     .nav-icon svg {
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
       stroke: #888;
       fill: none;
       stroke-width: 1.8;
@@ -95,18 +103,17 @@
     }
 
     .nav-badge {
-      background: #7c3aed;
+      background: #22c55e;
       color: #fff;
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 10px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin-left: auto;
-    }
-
-    .nav-item.active .nav-badge {
-      background: rgba(255,255,255,0.3);
-      color: #fff;
     }
 
     /* ===== MAIN ===== */
@@ -115,28 +122,29 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      min-width: 0;
     }
 
     /* ===== TOP HEADER ===== */
     .top-header {
-      height: 64px;
+      height: 72px;
       background: #fff;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #f0f0f0;
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      padding: 0 32px;
-      gap: 20px;
+      padding: 0 40px;
+      gap: 24px;
     }
 
     .header-icon {
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      border-radius: 10px;
+      border-radius: 12px;
       transition: background 0.15s;
       position: relative;
     }
@@ -146,24 +154,24 @@
     }
 
     .header-icon svg {
-      width: 22px;
-      height: 22px;
+      width: 26px;
+      height: 26px;
       stroke: #555;
       fill: none;
-      stroke-width: 1.8;
+      stroke-width: 1.6;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
 
     .notification-badge {
       position: absolute;
-      top: 4px;
-      right: 4px;
-      width: 18px;
-      height: 18px;
+      top: 2px;
+      right: 2px;
+      min-width: 20px;
+      height: 20px;
       background: #7c3aed;
       color: #fff;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
       border-radius: 50%;
       display: flex;
@@ -175,10 +183,10 @@
     .user-profile {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       cursor: pointer;
       padding: 4px 8px;
-      border-radius: 10px;
+      border-radius: 12px;
       transition: background 0.15s;
     }
 
@@ -187,37 +195,48 @@
     }
 
     .user-avatar {
-      width: 36px;
-      height: 36px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #e8a0bf, #c87da8);
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: linear-gradient(135deg, #e8b4d0, #c490b0);
+      flex-shrink: 0;
+    }
+
+    .user-avatar svg {
+      width: 44px;
+      height: 44px;
     }
 
     .user-avatar-placeholder {
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #d4a0c0, #b88aa8);
+      background: linear-gradient(135deg, #d898c0, #b87aa8);
       display: flex;
       align-items: center;
       justify-content: center;
       color: #fff;
-      font-size: 14px;
+      font-size: 18px;
       font-weight: 600;
     }
 
     .user-name {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 500;
       color: #333;
     }
 
+    .user-dropdown {
+      display: flex;
+      align-items: center;
+    }
+
     .user-dropdown svg {
-      width: 16px;
-      height: 16px;
+      width: 20px;
+      height: 20px;
       stroke: #888;
       fill: none;
       stroke-width: 2;
@@ -226,16 +245,26 @@
     /* ===== CONTENT ===== */
     .content {
       flex: 1;
-      padding: 32px 40px;
+      padding: 36px 48px;
       display: flex;
       flex-direction: column;
     }
 
     .page-title {
-      font-size: 24px;
-      font-weight: 600;
+      font-size: 28px;
+      font-weight: 700;
       color: #1a1a1a;
       margin-bottom: 28px;
+    }
+
+    /* ===== WHITE CARD ===== */
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
 
     /* ===== TOOLBAR ===== */
@@ -243,26 +272,26 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     .toolbar-left {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
     }
 
     .btn-add {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       background: #7c3aed;
       color: #fff;
       border: none;
-      padding: 10px 24px;
-      font-size: 15px;
+      padding: 14px 32px;
+      font-size: 16px;
       font-weight: 500;
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
       transition: background 0.15s;
       font-family: 'Inter', sans-serif;
@@ -272,27 +301,26 @@
       background: #6d28d9;
     }
 
-    .btn-add svg {
-      width: 18px;
-      height: 18px;
-      stroke: #fff;
-      fill: none;
-      stroke-width: 2.5;
+    .btn-add .plus-icon {
+      font-size: 20px;
+      font-weight: 300;
+      line-height: 1;
     }
 
     .btn-filter {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
       background: #fff;
-      color: #888;
-      border: 1px solid #ddd;
-      padding: 9px 20px;
-      font-size: 14px;
-      border-radius: 10px;
+      color: #aaa;
+      border: 1px solid #e0e0e0;
+      padding: 13px 24px;
+      font-size: 16px;
+      border-radius: 12px;
       cursor: pointer;
       font-family: 'Inter', sans-serif;
       transition: border-color 0.15s;
+      min-width: 130px;
     }
 
     .btn-filter:hover {
@@ -300,22 +328,23 @@
     }
 
     .btn-filter svg {
-      width: 16px;
-      height: 16px;
-      stroke: #aaa;
+      width: 18px;
+      height: 18px;
+      stroke: #bbb;
       fill: none;
       stroke-width: 2;
+      margin-left: auto;
     }
 
     .btn-delete {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      height: 48px;
       background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
       cursor: pointer;
       transition: border-color 0.15s;
     }
@@ -325,8 +354,8 @@
     }
 
     .btn-delete svg {
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       stroke: #7c3aed;
       fill: none;
       stroke-width: 1.8;
@@ -336,15 +365,15 @@
 
     .search-box {
       position: relative;
-      width: 260px;
+      width: 280px;
     }
 
     .search-box input {
       width: 100%;
-      padding: 10px 16px 10px 40px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      font-size: 14px;
+      padding: 13px 20px 13px 48px;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 16px;
       font-family: 'Inter', sans-serif;
       color: #333;
       background: #fff;
@@ -360,84 +389,79 @@
       border-color: #7c3aed;
     }
 
-    .search-box svg {
+    .search-box .search-icon-wrapper {
       position: absolute;
-      left: 14px;
+      left: 16px;
       top: 50%;
       transform: translateY(-50%);
-      width: 18px;
-      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-box .search-icon-wrapper svg {
+      width: 20px;
+      height: 20px;
       stroke: #bbb;
       fill: none;
       stroke-width: 2;
     }
 
     /* ===== TABLE ===== */
-    .table-container {
-      background: #fff;
-      border-radius: 12px;
-      border: 1px solid #eee;
-      overflow: hidden;
+    .table-wrapper {
       flex: 1;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      table-layout: fixed;
     }
 
     thead th {
       background: #fff;
       color: #999;
       font-weight: 500;
-      font-size: 13px;
-      padding: 14px 12px;
+      font-size: 14px;
+      padding: 16px 12px;
       text-align: left;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #f0f0f0;
       white-space: nowrap;
     }
 
     thead th:first-child {
       width: 48px;
-      text-align: center;
+      padding-left: 4px;
     }
 
     tbody tr {
       border-bottom: 1px solid #f0f0f0;
-      transition: background 0.1s;
     }
 
     tbody tr:last-child {
       border-bottom: none;
     }
 
-    tbody tr:hover {
-      background: #fafafa;
-    }
-
     tbody td {
-      padding: 16px 12px;
+      padding: 18px 12px;
       font-size: 14px;
       color: #333;
       vertical-align: middle;
     }
 
     tbody td:first-child {
-      text-align: center;
+      padding-left: 4px;
     }
 
     /* Checkbox */
     .checkbox {
-      width: 20px;
-      height: 20px;
-      border: 2px solid #ddd;
-      border-radius: 4px;
+      width: 22px;
+      height: 22px;
+      border: 2px solid #d0d0d0;
+      border-radius: 6px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.15s;
     }
 
     .checkbox.checked {
@@ -457,45 +481,54 @@
     .source-name {
       font-weight: 600;
       color: #1a1a1a;
+      font-size: 14px;
     }
 
-    .source-name.truncated {
-      max-width: 80px;
+    .source-truncated {
+      max-width: 90px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       display: inline-block;
+      vertical-align: middle;
     }
 
     /* Date cell */
     .date-cell {
-      font-size: 13px;
-      color: #666;
-      line-height: 1.4;
+      font-size: 14px;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    /* Customer cell */
+    .customer-cell {
+      font-size: 14px;
+      color: #333;
+      line-height: 1.5;
     }
 
     /* Pill / tag style */
     .pill {
       display: inline-block;
-      padding: 4px 14px;
+      padding: 6px 16px;
       border-radius: 8px;
-      font-size: 13px;
-      background: #f5f5f7;
+      font-size: 14px;
+      background: #f7f7f7;
       border: 1px solid #eee;
-      color: #555;
+      color: #444;
     }
 
     /* Color tag */
     .color-tag {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 4px 12px;
+      gap: 8px;
+      padding: 6px 14px;
       border-radius: 8px;
-      background: #f5f5f7;
+      background: #f7f7f7;
       border: 1px solid #eee;
-      font-size: 13px;
-      color: #555;
+      font-size: 14px;
+      color: #444;
     }
 
     .color-dot {
@@ -503,67 +536,66 @@
       height: 10px;
       border-radius: 50%;
       background: #f4a0b0;
+      flex-shrink: 0;
     }
 
     /* Status badge */
     .status-badge {
       display: inline-block;
-      padding: 5px 16px;
+      padding: 6px 20px;
       border-radius: 8px;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 500;
       color: #fff;
-    }
-
-    .status-badge.in-work {
       background: #7c3aed;
+      white-space: nowrap;
     }
 
-    .status-badge.done {
-      background: #6d28d9;
+    /* Recipient cell */
+    .recipient-cell {
+      font-size: 14px;
+      color: #333;
+      line-height: 1.5;
     }
 
     /* PDF button */
     .pdf-btn {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      padding: 6px 12px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
+      gap: 6px;
+      padding: 10px 14px;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
       background: #fff;
-      font-size: 12px;
-      color: #888;
+      font-size: 14px;
+      color: #999;
       cursor: pointer;
-      transition: border-color 0.15s;
-    }
-
-    .pdf-btn:hover {
-      border-color: #bbb;
+      white-space: nowrap;
     }
 
     .pdf-btn svg {
-      width: 12px;
-      height: 12px;
-      stroke: #aaa;
+      width: 14px;
+      height: 14px;
+      stroke: #bbb;
       fill: none;
       stroke-width: 2;
     }
 
     /* Thumbnail image */
     .thumbnail {
-      width: 52px;
-      height: 52px;
-      border-radius: 8px;
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
       object-fit: cover;
-      background: linear-gradient(135deg, #d4a07a, #b8866a);
+      background: linear-gradient(145deg, #c4a882, #a08868);
+      flex-shrink: 0;
     }
 
     /* Макет cell */
     .maket-cell {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
     /* ===== PAGINATION ===== */
@@ -571,7 +603,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 24px 0 0;
+      padding: 28px 0 0;
     }
 
     .pagination {
@@ -581,23 +613,23 @@
     }
 
     .page-btn {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       display: flex;
       align-items: center;
       justify-content: center;
       border: none;
       background: none;
-      font-size: 14px;
+      font-size: 15px;
       color: #666;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       font-family: 'Inter', sans-serif;
       transition: background 0.15s;
     }
 
     .page-btn:hover {
-      background: #f5f5f7;
+      background: #f0f0f0;
     }
 
     .page-btn.active {
@@ -606,21 +638,27 @@
       font-weight: 600;
     }
 
+    .page-btn.arrow {
+      color: #999;
+    }
+
     .page-btn.arrow svg {
       width: 18px;
       height: 18px;
       stroke: #666;
       fill: none;
       stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .page-dots {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      font-size: 15px;
       color: #999;
     }
 
@@ -628,27 +666,15 @@
       font-size: 14px;
       color: #999;
     }
-
-    /* Column widths */
-    .col-check { width: 48px; }
-    .col-source { width: 10%; }
-    .col-date { width: 6%; }
-    .col-customer { width: 9%; }
-    .col-product { width: 8%; }
-    .col-personal { width: 11%; }
-    .col-color { width: 8%; }
-    .col-size { width: 7%; }
-    .col-design { width: 7%; }
-    .col-status { width: 9%; }
-    .col-recipient { width: 9%; }
-    .col-maket { width: 14%; }
   </style>
 </head>
 <body>
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
-    <div class="sidebar-logo">bteam</div>
+    <div class="sidebar-logo">
+      <span class="logo-b">b</span><span class="logo-team">team</span>
+    </div>
     <nav class="sidebar-nav">
       <a class="nav-item" href="#">
         <span class="nav-icon">
@@ -711,101 +737,107 @@
     <div class="content">
       <h1 class="page-title">Таблиця замовлень</h1>
 
-      <!-- TOOLBAR -->
-      <div class="toolbar">
-        <div class="toolbar-left">
-          <button class="btn-add">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Додати
-          </button>
-          <button class="btn-filter">
-            Filter
-            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <button class="btn-delete">
-            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-          </button>
+      <div class="card">
+        <!-- TOOLBAR -->
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <button class="btn-add">
+              <span class="plus-icon">+</span>
+              Додати
+            </button>
+            <button class="btn-filter">
+              Filter
+              <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <button class="btn-delete">
+              <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+          <div class="search-box">
+            <span class="search-icon-wrapper">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </span>
+            <input type="text" placeholder="Search...">
+          </div>
         </div>
-        <div class="search-box">
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" placeholder="Search...">
-        </div>
-      </div>
 
-      <!-- TABLE -->
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th class="col-check"></th>
-              <th class="col-source">Джерело</th>
-              <th class="col-date">Date</th>
-              <th class="col-customer">Замовник</th>
-              <th class="col-product">Товар</th>
-              <th class="col-personal">Персоналізація</th>
-              <th class="col-color">Колір</th>
-              <th class="col-size">Розмір</th>
-              <th class="col-design">Дизайн</th>
-              <th class="col-status">Статус</th>
-              <th class="col-recipient">Отримувач</th>
-              <th class="col-maket">Макет</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Row 1 - selected -->
-            <tr>
-              <td>
-                <div class="checkbox checked">
-                  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-                </div>
-              </td>
-              <td><span class="source-name">Dreamble</span></td>
-              <td><div class="date-cell">03.12<br>03.16</div></td>
-              <td>Tom<br>Anderson</td>
-              <td><span class="pill">Копілка</span></td>
-              <td><span class="pill">Sabrina</span></td>
-              <td><span class="color-tag"><span class="color-dot"></span> Pink</span></td>
-              <td><span class="pill">XS</span></td>
-              <td><span class="pill">C-12</span></td>
-              <td><span class="status-badge in-work">В роботі</span></td>
-              <td>Tom<br>Anderson</td>
-              <td>
-                <div class="maket-cell">
-                  <span class="pdf-btn">
-                    pdf
-                    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-                  </span>
-                  <div class="thumbnail"></div>
-                </div>
-              </td>
-            </tr>
-            <!-- Row 2 -->
-            <tr>
-              <td>
-                <div class="checkbox"></div>
-              </td>
-              <td><span class="source-name truncated">SnugWoo...</span></td>
-              <td><div class="date-cell">03.12<br>03.16</div></td>
-              <td>Tom<br>Anderson</td>
-              <td><span class="pill">Копілка</span></td>
-              <td><span class="pill">Sabrina</span></td>
-              <td><span class="color-tag"><span class="color-dot"></span> Pink</span></td>
-              <td><span class="pill">XS</span></td>
-              <td><span class="pill">C-12</span></td>
-              <td><span class="status-badge done">Готово</span></td>
-              <td>Tom<br>Anderson</td>
-              <td>
-                <div class="maket-cell">
-                  <span class="pdf-btn">
-                    pdf
-                    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-                  </span>
-                  <div class="thumbnail"></div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <!-- TABLE -->
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>
+                  <div class="checkbox"></div>
+                </th>
+                <th>Джерело</th>
+                <th>Date</th>
+                <th>Замовник</th>
+                <th>Товар</th>
+                <th>Персоналізація</th>
+                <th>Колір</th>
+                <th>Розмір</th>
+                <th>Дизайн</th>
+                <th>Статус</th>
+                <th>Отримувач</th>
+                <th>Макет</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1 - selected -->
+              <tr>
+                <td>
+                  <div class="checkbox checked">
+                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </td>
+                <td><span class="source-name">Dreamble</span></td>
+                <td><div class="date-cell">03.12<br>03.16</div></td>
+                <td><div class="customer-cell">Tom<br>Anderson</div></td>
+                <td><span class="pill">Копілка</span></td>
+                <td><span class="pill">Sabrina</span></td>
+                <td><span class="color-tag"><span class="color-dot"></span> Pink</span></td>
+                <td><span class="pill">XS</span></td>
+                <td><span class="pill">C-12</span></td>
+                <td><span class="status-badge">В роботі</span></td>
+                <td><div class="recipient-cell">Tom<br>Anderson</div></td>
+                <td>
+                  <div class="maket-cell">
+                    <span class="pdf-btn">
+                      pdf
+                      <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                    </span>
+                    <div class="thumbnail"></div>
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 2 -->
+              <tr>
+                <td>
+                  <div class="checkbox"></div>
+                </td>
+                <td><span class="source-name source-truncated">SnugWoo...</span></td>
+                <td><div class="date-cell">03.12<br>03.16</div></td>
+                <td><div class="customer-cell">Tom<br>Anderson</div></td>
+                <td><span class="pill">Копілка</span></td>
+                <td><span class="pill">Sabrina</span></td>
+                <td><span class="color-tag"><span class="color-dot"></span> Pink</span></td>
+                <td><span class="pill">XS</span></td>
+                <td><span class="pill">C-12</span></td>
+                <td><span class="status-badge">Готово</span></td>
+                <td><div class="recipient-cell">Tom<br>Anderson</div></td>
+                <td>
+                  <div class="maket-cell">
+                    <span class="pdf-btn">
+                      pdf
+                      <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                    </span>
+                    <div class="thumbnail"></div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- PAGINATION -->
