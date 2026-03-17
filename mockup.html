@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bteam - Таблиця замовлень</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f5f7;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width: 210px;
+      min-height: 100vh;
+      background: #fff;
+      border-right: 1px solid #eee;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 0;
+      flex-shrink: 0;
+    }
+
+    .sidebar-logo {
+      padding: 0 24px;
+      margin-bottom: 36px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #7c3aed;
+      letter-spacing: -0.5px;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 24px;
+      font-size: 15px;
+      color: #555;
+      text-decoration: none;
+      border-radius: 0 24px 24px 0;
+      margin-right: 16px;
+      cursor: pointer;
+      transition: background 0.15s;
+      position: relative;
+    }
+
+    .nav-item:hover {
+      background: #f8f5ff;
+    }
+
+    .nav-item.active {
+      background: #7c3aed;
+      color: #fff;
+    }
+
+    .nav-item.active .nav-icon svg {
+      stroke: #fff;
+    }
+
+    .nav-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: #888;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-badge {
+      background: #7c3aed;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-left: auto;
+    }
+
+    .nav-item.active .nav-badge {
+      background: rgba(255,255,255,0.3);
+      color: #fff;
+    }
+
+    /* ===== MAIN ===== */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ===== TOP HEADER ===== */
+    .top-header {
+      height: 64px;
+      background: #fff;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 32px;
+      gap: 20px;
+    }
+
+    .header-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: background 0.15s;
+      position: relative;
+    }
+
+    .header-icon:hover {
+      background: #f5f5f7;
+    }
+
+    .header-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: #555;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 18px;
+      height: 18px;
+      background: #7c3aed;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 600;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #fff;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 10px;
+      transition: background 0.15s;
+    }
+
+    .user-profile:hover {
+      background: #f5f5f7;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #e8a0bf, #c87da8);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .user-avatar-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #d4a0c0, #b88aa8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .user-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .user-dropdown svg {
+      width: 16px;
+      height: 16px;
+      stroke: #888;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* ===== CONTENT ===== */
+    .content {
+      flex: 1;
+      padding: 32px 40px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 28px;
+    }
+
+    /* ===== TOOLBAR ===== */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-add {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #7c3aed;
+      color: #fff;
+      border: none;
+      padding: 10px 24px;
+      font-size: 15px;
+      font-weight: 500;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-add:hover {
+      background: #6d28d9;
+    }
+
+    .btn-add svg {
+      width: 18px;
+      height: 18px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2.5;
+    }
+
+    .btn-filter {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      color: #888;
+      border: 1px solid #ddd;
+      padding: 9px 20px;
+      font-size: 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.15s;
+    }
+
+    .btn-filter:hover {
+      border-color: #bbb;
+    }
+
+    .btn-filter svg {
+      width: 16px;
+      height: 16px;
+      stroke: #aaa;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .btn-delete {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .btn-delete:hover {
+      border-color: #bbb;
+    }
+
+    .btn-delete svg {
+      width: 18px;
+      height: 18px;
+      stroke: #7c3aed;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .search-box {
+      position: relative;
+      width: 260px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 10px 16px 10px 40px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      color: #333;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .search-box input::placeholder {
+      color: #bbb;
+    }
+
+    .search-box input:focus {
+      border-color: #7c3aed;
+    }
+
+    .search-box svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      stroke: #bbb;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* ===== TABLE ===== */
+    .table-container {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #eee;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    thead th {
+      background: #fff;
+      color: #999;
+      font-weight: 500;
+      font-size: 13px;
+      padding: 14px 12px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+      white-space: nowrap;
+    }
+
+    thead th:first-child {
+      width: 48px;
+      text-align: center;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #f0f0f0;
+      transition: background 0.1s;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: #fafafa;
+    }
+
+    tbody td {
+      padding: 16px 12px;
+      font-size: 14px;
+      color: #333;
+      vertical-align: middle;
+    }
+
+    tbody td:first-child {
+      text-align: center;
+    }
+
+    /* Checkbox */
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .checkbox.checked {
+      background: #7c3aed;
+      border-color: #7c3aed;
+    }
+
+    .checkbox.checked svg {
+      stroke: #fff;
+      width: 14px;
+      height: 14px;
+      stroke-width: 3;
+      fill: none;
+    }
+
+    /* Source name */
+    .source-name {
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .source-name.truncated {
+      max-width: 80px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    /* Date cell */
+    .date-cell {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    /* Pill / tag style */
+    .pill {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      background: #f5f5f7;
+      border: 1px solid #eee;
+      color: #555;
+    }
+
+    /* Color tag */
+    .color-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 8px;
+      background: #f5f5f7;
+      border: 1px solid #eee;
+      font-size: 13px;
+      color: #555;
+    }
+
+    .color-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #f4a0b0;
+    }
+
+    /* Status badge */
+    .status-badge {
+      display: inline-block;
+      padding: 5px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #fff;
+    }
+
+    .status-badge.in-work {
+      background: #7c3aed;
+    }
+
+    .status-badge.done {
+      background: #6d28d9;
+    }
+
+    /* PDF button */
+    .pdf-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fff;
+      font-size: 12px;
+      color: #888;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .pdf-btn:hover {
+      border-color: #bbb;
+    }
+
+    .pdf-btn svg {
+      width: 12px;
+      height: 12px;
+      stroke: #aaa;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* Thumbnail image */
+    .thumbnail {
+      width: 52px;
+      height: 52px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #d4a07a, #b8866a);
+    }
+
+    /* Макет cell */
+    .maket-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ===== PAGINATION ===== */
+    .pagination-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 0 0;
+    }
+
+    .pagination {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .page-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: none;
+      font-size: 14px;
+      color: #666;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.15s;
+    }
+
+    .page-btn:hover {
+      background: #f5f5f7;
+    }
+
+    .page-btn.active {
+      background: #7c3aed;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .page-btn.arrow svg {
+      width: 18px;
+      height: 18px;
+      stroke: #666;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .page-dots {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #999;
+    }
+
+    .results-count {
+      font-size: 14px;
+      color: #999;
+    }
+
+    /* Column widths */
+    .col-check { width: 48px; }
+    .col-source { width: 10%; }
+    .col-date { width: 6%; }
+    .col-customer { width: 9%; }
+    .col-product { width: 8%; }
+    .col-personal { width: 11%; }
+    .col-color { width: 8%; }
+    .col-size { width: 7%; }
+    .col-design { width: 7%; }
+    .col-status { width: 9%; }
+    .col-recipient { width: 9%; }
+    .col-maket { width: 14%; }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">bteam</div>
+    <nav class="sidebar-nav">
+      <a class="nav-item" href="#">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </span>
+        <span>Важливо</span>
+      </a>
+      <a class="nav-item active" href="#">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </span>
+        <span>Таблиця</span>
+        <span class="nav-badge">16</span>
+      </a>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        </span>
+        <span>Товари</span>
+      </a>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        </span>
+        <span>Склад</span>
+      </a>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </span>
+        <span>Фінанси</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- TOP HEADER -->
+    <header class="top-header">
+      <div class="header-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="header-icon">
+        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notification-badge">5</span>
+      </div>
+      <div class="user-profile">
+        <div class="user-avatar">
+          <div class="user-avatar-placeholder">M</div>
+        </div>
+        <span class="user-name">Марта</span>
+        <span class="user-dropdown">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <div class="content">
+      <h1 class="page-title">Таблиця замовлень</h1>
+
+      <!-- TOOLBAR -->
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button class="btn-add">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Додати
+          </button>
+          <button class="btn-filter">
+            Filter
+            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <button class="btn-delete">
+            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </button>
+        </div>
+        <div class="search-box">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Search...">
+        </div>
+      </div>
+
+      <!-- TABLE -->
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-check"></th>
+              <th class="col-source">Джерело</th>
+              <th class="col-date">Date</th>
+              <th class="col-customer">Замовник</th>
+              <th class="col-product">Товар</th>
+              <th class="col-personal">Персоналізація</th>
+              <th class="col-color">Колір</th>
+              <th class="col-size">Розмір</th>
+              <th class="col-design">Дизайн</th>
+              <th class="col-status">Статус</th>
+              <th class="col-recipient">Отримувач</th>
+              <th class="col-maket">Макет</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Row 1 - selected -->
+            <tr>
+              <td>
+                <div class="checkbox checked">
+                  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+              </td>
+              <td><span class="source-name">Dreamble</span></td>
+              <td><div class="date-cell">03.12<br>03.16</div></td>
+              <td>Tom<br>Anderson</td>
+              <td><span class="pill">Копілка</span></td>
+              <td><span class="pill">Sabrina</span></td>
+              <td><span class="color-tag"><span class="color-dot"></span> Pink</span></td>
+              <td><span class="pill">XS</span></td>
+              <td><span class="pill">C-12</span></td>
+              <td><span class="status-badge in-work">В роботі</span></td>
+              <td>Tom<br>Anderson</td>
+              <td>
+                <div class="maket-cell">
+                  <span class="pdf-btn">
+                    pdf
+                    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                  </span>
+                  <div class="thumbnail"></div>
+                </div>
+              </td>
+            </tr>
+            <!-- Row 2 -->
+            <tr>
+              <td>
+                <div class="checkbox"></div>
+              </td>
+              <td><span class="source-name truncated">SnugWoo...</span></td>
+              <td><div class="date-cell">03.12<br>03.16</div></td>
+              <td>Tom<br>Anderson</td>
+              <td><span class="pill">Копілка</span></td>
+              <td><span class="pill">Sabrina</span></td>
+              <td><span class="color-tag"><span class="color-dot"></span> Pink</span></td>
+              <td><span class="pill">XS</span></td>
+              <td><span class="pill">C-12</span></td>
+              <td><span class="status-badge done">Готово</span></td>
+              <td>Tom<br>Anderson</td>
+              <td>
+                <div class="maket-cell">
+                  <span class="pdf-btn">
+                    pdf
+                    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                  </span>
+                  <div class="thumbnail"></div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="pagination-row">
+        <div class="pagination">
+          <button class="page-btn arrow">
+            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="page-btn">1</button>
+          <button class="page-btn active">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">4</button>
+          <button class="page-btn">5</button>
+          <button class="page-btn">6</button>
+          <span class="page-dots">...</span>
+          <button class="page-btn">24</button>
+          <button class="page-btn arrow">
+            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+        <span class="results-count">274 Results</span>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
